@@ -4,6 +4,8 @@
 void main() {
     printf("Hello, world!");
     
+    char dummy = '"';
+    
     if( (some_condition && 
         another_condition &&
         some_other_condition)) {
