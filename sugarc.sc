@@ -75,6 +75,19 @@ int main (int argc, char **argv):
             needs_closing_paren = 1
         else if (nthByte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted):
             printf("(\"")
+        else if (in_regular_code() && nthByte(0) == ' ' && nthByte(1) == 'a' && nthByte(2) == 'n' && nthByte(3) == 'd' && (nthByte(4) == ' ' || nthByte(4) == '\n')):
+            printf(" &&")
+            printf("%c", nthByte(4))
+            getNextByte()
+            getNextByte()
+            getNextByte()
+            getNextByte()
+        else if (in_regular_code() && nthByte(0) == ' ' && nthByte(1) == 'o' && nthByte(2) == 'r' && (nthByte(3) == ' ' || nthByte(3) == '\n')):
+            printf(" ||")
+            printf("%c", nthByte(3))
+            getNextByte()
+            getNextByte()
+            getNextByte()
         else:
             printf("%c", nthByte(0))
 

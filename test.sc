@@ -9,8 +9,8 @@ void main():
     char dummy3 = "'"
     char dummy3 = "\\\""
     
-    if (some_condition && 
-        another_condition &&
+    if (some_condition and 
+        another_condition or
         some_other_condition):
         do_something()
     
