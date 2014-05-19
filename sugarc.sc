@@ -8,6 +8,14 @@
 
 unsigned char buf[256]
 unsigned char buf_start = 255
+unsigned char is_preprocessor_line = 0
+unsigned char is_single_quoted = 0
+unsigned char is_double_quoted = 0
+unsigned char literal = 0
+
+int in_regular_code() {
+    return !is_double_quoted && !is_single_quoted && !is_preprocessor_line
+}
 
 void fillBuf():
     if (!fread(buf, 1, 255, stdin)):
@@ -44,10 +52,7 @@ int main (int argc, char **argv):
     int line_pos = 0
     unsigned char open_braces = 0
     unsigned char previous_indent = 0
-    unsigned char is_preprocessor_line = 0
-    unsigned char is_single_quoted = 0
-    unsigned char is_double_quoted = 0
-    unsigned char literal = 0
+    unsigned char needs_closing_paren = 0
 
     fillBuf()
 
@@ -59,9 +64,17 @@ int main (int argc, char **argv):
 
     while (getNextByte()):
         if (nthByte(0) == ':' && nthByte(1) == '\n'):
+            if (needs_closing_paren):
+                printf(")")
+                needs_closing_paren = 0
             printf(" {")
             open_braces++
-         else:
+        else if (in_regular_code() && nthByte(0) == 'i' && nthByte(1) == 'f'):
+            printf("i")
+            printf("f(")
+            getNextByte()
+            needs_closing_paren = 1
+        else:
             printf("%c", nthByte(0))
 
         if (!is_preprocessor_line):
