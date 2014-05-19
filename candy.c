@@ -17,7 +17,7 @@ int in_regular_code() {
     return !is_double_quoted && !is_single_quoted && !is_preprocessor_line;
 }
 
-void fillBuf() {
+void fill_buffer() {
     if( !fread(buf, 1, 255, stdin)) {
         exit(0);
     }
@@ -65,7 +65,7 @@ int main (int argc, char **argv) {
     unsigned char previous_indent = 0;
     unsigned char needs_closing_paren = 0;
 
-    fillBuf();
+    fill_buffer();
 
     #ifdef _WIN32
     // Work around newline replacement on Windows;
