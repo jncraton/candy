@@ -123,7 +123,7 @@ int main (int argc, char **argv):
         if (nthByte(0) == '"' && !literal && !is_single_quoted):
             is_double_quoted = !is_double_quoted
         
-        if nthByte(0) == '\\':
+        if nthByte(0) == '\\' && !literal:
             literal = 1
         else:
             literal = 0
