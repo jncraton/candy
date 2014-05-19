@@ -56,6 +56,8 @@ int main (int argc, char **argv) {
     unsigned char open_braces = 0;
     unsigned char previous_indent = 0;
     unsigned char is_preprocessor_line = 0;
+    unsigned char is_single_quoted = 0;
+    unsigned char literal = 0;
 
     fillBuf();
 
@@ -116,15 +118,26 @@ int main (int argc, char **argv) {
                 printf(";");
             }
         }
-
+        
         if (ithByte(0) == '\n') {
             is_preprocessor_line = 0;
         }
 
-        if (ithByte(0) == '#' && ithByte(1) != '\'') {
+        if (ithByte(0) == '#' && !is_single_quoted) {
             is_preprocessor_line = 1;
         }
 
+        if (ithByte(0) == '\'' && !literal) {
+            is_single_quoted = !is_single_quoted;
+        }
+        
+        if (ithByte(0) == '\\') {
+            literal = 1;
+        }
+        else {
+            literal = 0;
+        }
+        
         line_pos +=1;
     }
 
