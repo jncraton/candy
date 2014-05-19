@@ -82,24 +82,23 @@ int main (int argc, char **argv):
 
             // Handle semicolon insertions
             if (ithByte(1) == '\n' &&
-            ithByte(0) != ';' &&
-            ithByte(0) != ',' &&
-            ithByte(0) != '&' &&
-            //                ithByte(0) != '+' &&
-            //                ithByte(0) != '-' &&
-            ithByte(0) != '*' &&
-            ithByte(0) != '/' &&
-            ithByte(0) != '>' &&
-            ithByte(0) != '<' &&
-            ithByte(0) != '"' &&
-            ithByte(0) != '\'' &&
-            ithByte(0) != '|' &&
-            ithByte(0) != '{' &&
-            ithByte(0) != '}' &&
-            ithByte(0) != ' ' &&
-            ithByte(0) != '\n' &&
-            ithByte(0) != ':'
-            ):
+                ithByte(0) != ';' &&
+                ithByte(0) != ',' &&
+                ithByte(0) != '&' &&
+                //                ithByte(0) != '+' &&
+                //                ithByte(0) != '-' &&
+                ithByte(0) != '*' &&
+                ithByte(0) != '/' &&
+                ithByte(0) != '>' &&
+                ithByte(0) != '<' &&
+                ithByte(0) != '"' &&
+                ithByte(0) != '\'' &&
+                ithByte(0) != '|' &&
+                ithByte(0) != '{' &&
+                ithByte(0) != '}' &&
+                ithByte(0) != ' ' &&
+                ithByte(0) != '\n' &&
+                ithByte(0) != ':'):
                 printf(";")
         
         if (ithByte(0) == '\n'):
