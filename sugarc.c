@@ -83,8 +83,7 @@ int main (int argc, char **argv) {
             open_braces++;
         }
         else if( (in_regular_code() && nthByte(0) == 'i' && nthByte(1) == 'f')) {
-            printf("i");
-            printf("f(");
+            printf("if(");
             getNextByte();
             needs_closing_paren = 1;
         }
@@ -134,19 +133,19 @@ int main (int argc, char **argv) {
             }
         }
         
-        if( (nthByte(0) == '\n')) {
+        if (nthByte(0) == '\n') {
             is_preprocessor_line = 0;
         }
 
-        if( (nthByte(0) == '#' && !(is_single_quoted || is_double_quoted))) {
+        if (nthByte(0) == '#' && !(is_single_quoted || is_double_quoted)) {
             is_preprocessor_line = 1;
         }
 
-        if( (nthByte(0) == '\'' && !literal)) {
+        if (nthByte(0) == '\'' && !literal) {
             is_single_quoted = !is_single_quoted;
         }
 
-        if( (nthByte(0) == '\'' && !literal)) {
+        if (nthByte(0) == '"' && !literal) {
             is_double_quoted = !is_double_quoted;
         }
         
