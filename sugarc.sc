@@ -14,7 +14,7 @@ unsigned char is_double_quoted = 0
 unsigned char literal = 0
 
 int in_regular_code() {
-    return !is_double_quoted && !is_single_quoted && !is_preprocessor_line
+    return !is_double_quoted and !is_single_quoted and !is_preprocessor_line
 }
 
 void fillBuf():
@@ -41,7 +41,7 @@ unsigned char getNextByte():
 
 int nextLineIndent():
     for (unsigned char i = 0; i < 255; i++):
-        if (nthByte(i) == '\n' && nthByte(i+1) != '\n'):
+        if (nthByte(i) == '\n' and nthByte(i+1) != '\n'):
             unsigned char count
             for (count = 0; nthByte(i + count + 1) == ' '; count++)
             return count >> 2
@@ -63,26 +63,26 @@ int main (int argc, char **argv):
     #endif
 
     while (getNextByte()):
-        if nthByte(0) == ':' && nthByte(1) == '\n':
+        if nthByte(0) == ':' and nthByte(1) == '\n':
             if needs_closing_paren:
                 printf(")")
                 needs_closing_paren = 0
             printf(" {")
             open_braces++
-        else if (in_regular_code() && nthByte(0) == 'i' && nthByte(1) == 'f'):
+        else if (in_regular_code() and nthByte(0) == 'i' and nthByte(1) == 'f'):
             printf("if(")
             getNextByte()
             needs_closing_paren = 1
-        else if (nthByte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted):
+        else if (nthByte(0) == '"' and !literal and !is_single_quoted and !is_double_quoted):
             printf("(\"")
-        else if (in_regular_code() && nthByte(0) == ' ' && nthByte(1) == 'a' && nthByte(2) == 'n' && nthByte(3) == 'd' && (nthByte(4) == ' ' || nthByte(4) == '\n')):
+        else if (in_regular_code() and nthByte(0) == ' ' and nthByte(1) == 'a' and nthByte(2) == 'n' and nthByte(3) == 'd' and (nthByte(4) == ' ' || nthByte(4) == '\n')):
             printf(" &&")
             printf("%c", nthByte(4))
             getNextByte()
             getNextByte()
             getNextByte()
             getNextByte()
-        else if (in_regular_code() && nthByte(0) == ' ' && nthByte(1) == 'o' && nthByte(2) == 'r' && (nthByte(3) == ' ' || nthByte(3) == '\n')):
+        else if (in_regular_code() and nthByte(0) == ' ' and nthByte(1) == 'o' and nthByte(2) == 'r' and (nthByte(3) == ' ' || nthByte(3) == '\n')):
             printf(" ||")
             printf("%c", nthByte(3))
             getNextByte()
@@ -94,7 +94,7 @@ int main (int argc, char **argv):
         if !is_preprocessor_line:
             // Handle closing brace insertion
             if nthByte(0) == '\n':
-                while (open_braces && previous_indent > nextLineIndent()):
+                while (open_braces and previous_indent > nextLineIndent()):
                     for (unsigned char i = 4; i < previous_indent << 2; i++):
                         printf(" ")
 
@@ -107,42 +107,42 @@ int main (int argc, char **argv):
                 printf("// Next indent level: %d\n", previous_indent)
                 #endif
 
-            if (nthByte(0) == '"' && !literal && !is_single_quoted):
+            if (nthByte(0) == '"' and !literal and !is_single_quoted):
                 if is_double_quoted:
                     printf(")")
             
             // Handle semicolon insertions
-            if (nthByte(1) == '\n' &&
-                nthByte(0) != ';' &&
-                nthByte(0) != ',' &&
-                nthByte(0) != '&' &&
-                //nthByte(0) != '+' &&
-                //nthByte(0) != '-' &&
-                nthByte(0) != '*' &&
-                nthByte(0) != '/' &&
-                nthByte(0) != '>' &&
-                nthByte(0) != '<' &&
-                nthByte(0) != '|' &&
-                nthByte(0) != '{' &&
-                nthByte(0) != '}' &&
-                nthByte(0) != ' ' &&
-                nthByte(0) != '\n' &&
+            if (nthByte(1) == '\n' and
+                nthByte(0) != ';' and
+                nthByte(0) != ',' and
+                nthByte(0) != '&' and
+                //nthByte(0) != '+' and
+                //nthByte(0) != '-' and
+                nthByte(0) != '*' and
+                nthByte(0) != '/' and
+                nthByte(0) != '>' and
+                nthByte(0) != '<' and
+                nthByte(0) != '|' and
+                nthByte(0) != '{' and
+                nthByte(0) != '}' and
+                nthByte(0) != ' ' and
+                nthByte(0) != '\n' and
                 nthByte(0) != ':'):
                 printf(";")
         
         if nthByte(0) == '\n':
             is_preprocessor_line = 0
 
-        if (nthByte(0) == '#' && !(is_single_quoted || is_double_quoted)):
+        if (nthByte(0) == '#' and !(is_single_quoted || is_double_quoted)):
             is_preprocessor_line = 1
 
-        if (nthByte(0) == '\'' && !literal && !is_double_quoted):
+        if (nthByte(0) == '\'' and !literal and !is_double_quoted):
             is_single_quoted = !is_single_quoted
 
-        if (nthByte(0) == '"' && !literal && !is_single_quoted):
+        if (nthByte(0) == '"' and !literal and !is_single_quoted):
             is_double_quoted = !is_double_quoted
         
-        if nthByte(0) == '\\' && !literal:
+        if nthByte(0) == '\\' and !literal:
             literal = 1
         else:
             literal = 0
