@@ -103,8 +103,6 @@ int main (int argc, char **argv):
                 nthByte(0) != '/' &&
                 nthByte(0) != '>' &&
                 nthByte(0) != '<' &&
-                nthByte(0) != '"' &&
-                nthByte(0) != '\'' &&
                 nthByte(0) != '|' &&
                 nthByte(0) != '{' &&
                 nthByte(0) != '}' &&
@@ -119,10 +117,10 @@ int main (int argc, char **argv):
         if (nthByte(0) == '#' && !(is_single_quoted || is_double_quoted)):
             is_preprocessor_line = 1
 
-        if (nthByte(0) == '\'' && !literal):
+        if (nthByte(0) == '\'' && !literal && !is_double_quoted):
             is_single_quoted = !is_single_quoted
 
-        if (nthByte(0) == '"' && !literal):
+        if (nthByte(0) == '"' && !literal && !is_single_quoted):
             is_double_quoted = !is_double_quoted
         
         if (nthByte(0) == '\\'):
