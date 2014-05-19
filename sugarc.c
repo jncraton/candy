@@ -93,7 +93,7 @@ int main (int argc, char **argv) {
 
         if( !is_preprocessor_line) {
             // Handle closing brace insertion;
-            if( (nthByte(0) == '\n' && !is_preprocessor_line)) {
+            if( nthByte(0) == '\n') {
                 while (open_braces && previous_indent > nextLineIndent()) {
                     for (unsigned char i = 4; i < previous_indent << 2; i++) {
                         printf(" ");
