@@ -3,3 +3,7 @@ sugarc.exe: sugarc.c
 	
 sugarc.c: sugarc.sc
 	sugarc < sugarc.sc > sugarc.c
+	
+clean:
+	rm sugarc.exe
+	rm sugarc.c
