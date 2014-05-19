@@ -13,9 +13,8 @@ unsigned char is_single_quoted = 0
 unsigned char is_double_quoted = 0
 unsigned char literal = 0
 
-int in_regular_code() {
+int in_regular_code():
     return !is_double_quoted and !is_single_quoted and !is_preprocessor_line
-}
 
 void fillBuf():
     if !fread(buf, 1, 255, stdin):
