@@ -18,7 +18,7 @@ int in_regular_code() {
 }
 
 void fillBuf() {
-    if( (!fread(buf, 1, 255, stdin))) {
+    if( !fread(buf, 1, 255, stdin)) {
         exit(0);
     }
 }
@@ -32,14 +32,14 @@ unsigned char getNextByte() {
 
     buf_start++;
 
-    if( (!fread(byte, 1, 1, stdin))) {
+    if( !fread(byte, 1, 1, stdin)) {
         buf[(unsigned char)(buf_start - 1)] = 0x00;
     }
      else {
         buf[(unsigned char)(buf_start - 1)] = byte[0];
     }
 
-    if( (!buf[buf_start])) {
+    if( !buf[buf_start]) {
         return 0;
     }
      else {
@@ -74,8 +74,8 @@ int main (int argc, char **argv) {
     #endif
 
     while (getNextByte()) {
-        if( (nthByte(0) == ':' && nthByte(1) == '\n')) {
-            if( (needs_closing_paren)) {
+        if( nthByte(0) == ':' && nthByte(1) == '\n') {
+            if( needs_closing_paren) {
                 printf(")");
                 needs_closing_paren = 0;
             }
@@ -91,7 +91,7 @@ int main (int argc, char **argv) {
             printf("%c", nthByte(0));
         }
 
-        if( (!is_preprocessor_line)) {
+        if( !is_preprocessor_line) {
             // Handle closing brace insertion;
             if( (nthByte(0) == '\n' && !is_preprocessor_line)) {
                 while (open_braces && previous_indent > nextLineIndent()) {
@@ -131,7 +131,7 @@ int main (int argc, char **argv) {
             }
         }
         
-        if( (nthByte(0) == '\n')) {
+        if( nthByte(0) == '\n') {
             is_preprocessor_line = 0;
         }
 
@@ -147,7 +147,7 @@ int main (int argc, char **argv) {
             is_double_quoted = !is_double_quoted;
         }
         
-        if( (nthByte(0) == '\\')) {
+        if( nthByte(0) == '\\') {
             literal = 1;
         }
         else {
