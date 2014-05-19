@@ -15,7 +15,7 @@ void fillBuf() {
     }
 }
 
-unsigned char ithByte(unsigned char i) {
+unsigned char nthByte(unsigned char i) {
     return buf[(unsigned char)(buf_start + i)];
 }
 
@@ -41,9 +41,9 @@ unsigned char getNextByte() {
 
 int nextLineIndent() {
     for (unsigned char i = 0; i < 255; i++) {
-        if (ithByte(i) == '\n' && ithByte(i+1) != '\n') {
+        if (nthByte(i) == '\n' && nthByte(i+1) != '\n') {
             unsigned char count;
-            for (count = 0; ithByte(i + count + 1) == ' '; count++);
+            for (count = 0; nthByte(i + count + 1) == ' '; count++);
             return count >> 2;
         }
     }
@@ -69,17 +69,17 @@ int main (int argc, char **argv) {
     #endif
 
     while (getNextByte()) {
-        if (ithByte(0) == ':' && ithByte(1) == '\n') {
+        if (nthByte(0) == ':' && nthByte(1) == '\n') {
             printf(" {");
             open_braces++;
         }
          else {
-            printf("%c", ithByte(0));
+            printf("%c", nthByte(0));
         }
 
         if (!is_preprocessor_line) {
             // Handle closing brace insertion;
-            if (ithByte(0) == '\n' && !is_preprocessor_line) {
+            if (nthByte(0) == '\n' && !is_preprocessor_line) {
                 while (open_braces && previous_indent > nextLineIndent()) {
                     for (unsigned char i = 4; i < previous_indent << 2; i++) {
                         printf(" ");
@@ -97,45 +97,45 @@ int main (int argc, char **argv) {
 
             }
             // Handle semicolon insertions;
-            if (ithByte(1) == '\n' &&
-                ithByte(0) != ';' &&
-                ithByte(0) != ',' &&
-                ithByte(0) != '&' &&
-                //                ithByte(0) != '+' &&
-                //                ithByte(0) != '-' &&
-                ithByte(0) != '*' &&
-                ithByte(0) != '/' &&
-                ithByte(0) != '>' &&
-                ithByte(0) != '<' &&
-                ithByte(0) != '"' &&
-                ithByte(0) != '\'' &&
-                ithByte(0) != '|' &&
-                ithByte(0) != '{' &&
-                ithByte(0) != '}' &&
-                ithByte(0) != ' ' &&
-                ithByte(0) != '\n' &&
-                ithByte(0) != ':') {
+            if (nthByte(1) == '\n' &&
+                nthByte(0) != ';' &&
+                nthByte(0) != ',' &&
+                nthByte(0) != '&' &&
+                //                nthByte(0) != '+' &&
+                //                nthByte(0) != '-' &&
+                nthByte(0) != '*' &&
+                nthByte(0) != '/' &&
+                nthByte(0) != '>' &&
+                nthByte(0) != '<' &&
+                nthByte(0) != '"' &&
+                nthByte(0) != '\'' &&
+                nthByte(0) != '|' &&
+                nthByte(0) != '{' &&
+                nthByte(0) != '}' &&
+                nthByte(0) != ' ' &&
+                nthByte(0) != '\n' &&
+                nthByte(0) != ':') {
                 printf(";");
             }
         }
         
-        if (ithByte(0) == '\n') {
+        if (nthByte(0) == '\n') {
             is_preprocessor_line = 0;
         }
 
-        if (ithByte(0) == '#' && !(is_single_quoted || is_double_quoted)) {
+        if (nthByte(0) == '#' && !(is_single_quoted || is_double_quoted)) {
             is_preprocessor_line = 1;
         }
 
-        if (ithByte(0) == '\'' && !literal) {
+        if (nthByte(0) == '\'' && !literal) {
             is_single_quoted = !is_single_quoted;
         }
 
-        if (ithByte(0) == '\'' && !literal) {
+        if (nthByte(0) == '\'' && !literal) {
             is_double_quoted = !is_double_quoted;
         }
         
-        if (ithByte(0) == '\\') {
+        if (nthByte(0) == '\\') {
             literal = 1;
         }
         else {
