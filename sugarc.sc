@@ -73,6 +73,8 @@ int main (int argc, char **argv):
             printf("if(")
             getNextByte()
             needs_closing_paren = 1
+        else if (nthByte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted):
+            printf("(\"")
         else:
             printf("%c", nthByte(0))
 
@@ -121,6 +123,8 @@ int main (int argc, char **argv):
             is_single_quoted = !is_single_quoted
 
         if (nthByte(0) == '"' && !literal && !is_single_quoted):
+            if is_double_quoted:
+                printf(")")
             is_double_quoted = !is_double_quoted
         
         if nthByte(0) == '\\' && !literal:

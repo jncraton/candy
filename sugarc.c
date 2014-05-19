@@ -76,19 +76,22 @@ int main (int argc, char **argv) {
     while (getNextByte()) {
         if( nthByte(0) == ':' && nthByte(1) == '\n') {
             if( needs_closing_paren) {
-                printf(")");
+                printf((")"));
                 needs_closing_paren = 0;
             }
-            printf(" {");
+            printf((" {"));
             open_braces++;
         }
         else if( (in_regular_code() && nthByte(0) == 'i' && nthByte(1) == 'f')) {
-            printf("if(");
+            printf(("if("));
             getNextByte();
             needs_closing_paren = 1;
         }
+        else if( (nthByte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted)) {
+            printf(("(\""));
+        }
         else {
-            printf("%c", nthByte(0));
+            printf(("%c"), nthByte(0));
         }
 
         if( !is_preprocessor_line) {
@@ -96,17 +99,17 @@ int main (int argc, char **argv) {
             if( nthByte(0) == '\n') {
                 while (open_braces && previous_indent > nextLineIndent()) {
                     for (unsigned char i = 4; i < previous_indent << 2; i++) {
-                        printf(" ");
+                        printf((" "));
                     }
 
-                    printf("}\n");
+                    printf(("}\n"));
                     previous_indent--;
                     open_braces--;
                 }
 
                 previous_indent = nextLineIndent();
                 #ifdef debug
-                printf("// Next indent level: %d\n", previous_indent);
+                printf(("// Next indent level: %d\n"), previous_indent);
                 #endif
 
             }
@@ -127,7 +130,7 @@ int main (int argc, char **argv) {
                 nthByte(0) != ' ' &&
                 nthByte(0) != '\n' &&
                 nthByte(0) != ':')) {
-                printf(";");
+                printf((";"));
             }
         }
         
@@ -144,6 +147,9 @@ int main (int argc, char **argv) {
         }
 
         if( (nthByte(0) == '"' && !literal && !is_single_quoted)) {
+            if( is_double_quoted) {
+                printf((")"));
+            }
             is_double_quoted = !is_double_quoted;
         }
         
