@@ -5,6 +5,9 @@ void main() {
     printf("Hello, world!");
     
     char dummy = '"';
+    char dummy2 = "\"";
+    char dummy3 = "'";
+    char dummy3 = "\\\"";
     
     if( (some_condition && 
         another_condition &&
