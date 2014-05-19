@@ -5,6 +5,7 @@ void main() {
     printf("Hello, world!");
     
     if (some_condition && 
+        another_condition &&
         some_other_condition) {
         do_something();
     }
