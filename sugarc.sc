@@ -94,6 +94,10 @@ int main (int argc, char **argv):
                 printf("// Next indent level: %d\n", previous_indent)
                 #endif
 
+            if (nthByte(0) == '"' && !literal && !is_single_quoted):
+                if is_double_quoted:
+                    printf(")")
+            
             // Handle semicolon insertions
             if (nthByte(1) == '\n' &&
                 nthByte(0) != ';' &&
@@ -123,8 +127,6 @@ int main (int argc, char **argv):
             is_single_quoted = !is_single_quoted
 
         if (nthByte(0) == '"' && !literal && !is_single_quoted):
-            if is_double_quoted:
-                printf(")")
             is_double_quoted = !is_double_quoted
         
         if nthByte(0) == '\\' && !literal:

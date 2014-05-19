@@ -2,12 +2,12 @@
 #include <stdio.h>
 
 void main() {
-    printf(("Hello, world!"));
+    printf ("Hello, world!");
     
     char dummy = '"';
-    char dummy2 = ("\"";)
-    char dummy3 = ("'";)
-    char dummy3 = ("\\\"";)
+    char dummy2 = ("\"");
+    char dummy3 = ("'");
+    char dummy3 = ("\\\"");
     
     if( (some_condition && 
         another_condition &&
