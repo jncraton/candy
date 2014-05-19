@@ -1,15 +1,15 @@
-sugarc.exe: sugarc.c
-	gcc -std=c99 -Wall -o sugarc.exe sugarc.c
+candy.exe: candy.c
+	gcc -std=c99 -Wall -o candy.exe candy.c
 	
-sugarc.c: sugarc.sc
-	sugarc < sugarc.sc > sugarc.c
+candy.c: candy.cn
+	candy < candy.cn > candy.c
 	
 clean:
-	rm sugarc.exe
-	rm sugarc.c
+	rm candy.exe
+	rm candy.c
 	rm test_out.c
 	
 test:
 	@echo Testing...
-	@sugarc.exe < test.sc > test_out.c
+	@candy.exe < test.cn > test_out.c
 	@cmp test_out.c test.c
