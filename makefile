@@ -7,3 +7,9 @@ sugarc.c: sugarc.sc
 clean:
 	rm sugarc.exe
 	rm sugarc.c
+	rm test_out.c
+	
+test:
+	@echo Testing...
+	@sugarc.exe < test.sc > test_out.c
+	@cmp test_out.c test.c
