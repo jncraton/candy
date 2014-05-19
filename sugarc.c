@@ -101,8 +101,8 @@ int main (int argc, char **argv) {
                 nthByte(0) != ';' &&
                 nthByte(0) != ',' &&
                 nthByte(0) != '&' &&
-                //                nthByte(0) != '+' &&
-                //                nthByte(0) != '-' &&
+                //nthByte(0) != '+' &&
+                //nthByte(0) != '-' &&
                 nthByte(0) != '*' &&
                 nthByte(0) != '/' &&
                 nthByte(0) != '>' &&
