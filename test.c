@@ -10,6 +10,7 @@ void main() {
     char dummy3 = ("\\\"");
     
     int this_is_false = (0);
+    int true_this_is = (1);
     
     if (do_something || do_something_else) {
     

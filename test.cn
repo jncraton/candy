@@ -10,6 +10,7 @@ void main():
     char dummy3 = "\\\""
     
     int this_is_false = false
+    int true_this_is = true
     
     if do_something or do_something_else:
         pass
