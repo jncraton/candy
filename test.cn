@@ -4,10 +4,10 @@ import stdio
 void main():
     printf "Hello, world!"
     
-    char dummy = '"'
-    char dummy2 = "\""
-    char dummy3 = "'"
-    char dummy3 = "\\\""
+    byte dummy = '"'
+    byte dummy2 = "\""
+    byte dummy3 = "'"
+    byte dummy3 = "\\\""
     
     int this_is_false = false
     int true_this_is = true

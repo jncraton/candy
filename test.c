@@ -4,10 +4,10 @@
 void main() {
     printf ("Hello, world!");
     
-    char dummy = '"';
-    char dummy2 = ("\"");
-    char dummy3 = ("'");
-    char dummy3 = ("\\\"");
+    unsigned char dummy = '"';
+    unsigned char dummy2 = ("\"");
+    unsigned char dummy3 = ("'");
+    unsigned char dummy3 = ("\\\"");
     
     int this_is_false = (0);
     int true_this_is = (1);

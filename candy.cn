@@ -144,6 +144,8 @@ int main (int argc, char **argv):
             pass
         else if replace_keyword("or", "||"):
             pass
+        else if replace_keyword("byte", "unsigned char"):
+            pass
         else:
             printf("%c", get_byte(0))
         

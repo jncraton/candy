@@ -177,6 +177,9 @@ int main (int argc, char **argv) {
         else if ( replace_keyword(("or"), ("||"))) {
             
         }
+        else if ( replace_keyword(("byte"), ("unsigned char"))) {
+            
+        }
         else {
             printf(("%c"), get_byte(0));
         }
