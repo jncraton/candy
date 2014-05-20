@@ -61,7 +61,7 @@ int next_line_indent() {
         
     }
 int replace_keyword(const char* keyword, const char* replacement) {
-    if(! in_regular_code()) {
+    if( ! in_regular_code()) {
         return 0;
         
     }
@@ -115,7 +115,7 @@ int main (int argc, char **argv) {
         }
         else if( (replace_keyword(("    pass\n"), ("}\n")))) {
         }
-        else if( (replace_keyword((" not"), ("!")))) {
+        else if( (replace_keyword((" not"), (" !")))) {
         }
         else if( (replace_keyword((" and"), (" &&")))) {
         }
