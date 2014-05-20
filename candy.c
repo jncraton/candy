@@ -4,7 +4,7 @@
 #include "fcntl.h"
 
 #ifdef _WIN32
-#include <io.h>
+#include "io.h"
 #endif
 
 unsigned char buf[256];
@@ -16,11 +16,11 @@ unsigned char is_double_quoted = (0);
 unsigned char literal = (0);
 
 int in_regular_code() {
-    return !is_double_quoted && !is_single_quoted && !is_preprocessor_line;
+    return ! is_double_quoted && ! is_single_quoted && ! is_preprocessor_line;
 }
 
 void fill_buffer() {
-    if (!(buf_len = fread(buf, 1, 254, stdin))) {
+    if ( ! (buf_len = fread(buf, 1, 254, stdin))) {
         exit(0);
     }
 }
@@ -34,13 +34,13 @@ unsigned char read_next_byte() {
 
     buf_start++;
 
-    if (!buf_len) {
+    if ( ! buf_len) {
         return (0);
     }
     
     buf_len--;
     
-    if (fread(byte, 1, 1, stdin)) {
+    if ( fread(byte, 1, 1, stdin)) {
         buf[(unsigned char)(buf_start - 2)] = byte[0];
         buf_len++;
     }
@@ -50,7 +50,7 @@ unsigned char read_next_byte() {
 
 int next_line_indent() {
     for (unsigned char i = 0; i < 255; i++) {
-        if ((get_byte(i) == '\n' && get_byte(i+1) != '\n')) {
+        if ( (get_byte(i) == '\n' && get_byte(i+1) != '\n')) {
             unsigned char count;
             for (count = 0; get_byte(i + count + 1) == ' '; count++);
             return count >> 2;
@@ -65,20 +65,20 @@ int is_valid_name_char(unsigned char c) {
 }
 
 int replace_keyword(const char* keyword, const char* replacement) {
-    if (!in_regular_code()) {
+    if ( ! in_regular_code()) {
         return (0);
     }
     
-    if (is_valid_name_char(get_byte(-1))) {
+    if ( is_valid_name_char(get_byte(-1))) {
         return (0);
     }
     
-    if (is_valid_name_char(get_byte(strlen(keyword)))) {
+    if ( is_valid_name_char(get_byte(strlen(keyword)))) {
         return (0);
     }
     
     for (int i = 0; i < strlen(keyword); i++) {
-        if (get_byte(i) != keyword[i]) {
+        if ( get_byte(i) != keyword[i]) {
             return (0);
         }
     }
@@ -110,9 +110,9 @@ int main (int argc, char **argv) {
     #endif
 
     while (read_next_byte()) {
-        if (!is_preprocessor_line) {
+        if ( ! is_preprocessor_line) {
             // Handle semicolon insertions;
-            if ((get_byte(0) == '\n' &&
+            if ( (get_byte(0) == '\n' &&
                 get_byte(-1) != ';' &&
                 get_byte(-1) != ',' &&
                 get_byte(-1) != '&' &&
@@ -132,58 +132,58 @@ int main (int argc, char **argv) {
             }
         }
 
-        if (get_byte(0) == ':' && get_byte(1) == '\n') {
-            if (needs_closing_paren) {
+        if ( get_byte(0) == ':' && get_byte(1) == '\n') {
+            if ( needs_closing_paren) {
                 printf((")"));
                 needs_closing_paren = (0);
             }
             printf((" {"));
             open_braces++;
         }
-        else if (get_byte(0) == '\n') {
-            if (needs_closing_imp) {
+        else if ( get_byte(0) == '\n') {
+            if ( needs_closing_imp) {
                 printf((".h\""));
                 needs_closing_imp = (0);
             }
             printf(("\n"));
         }
-        else if (replace_keyword(("if"), ("if ("))) {
+        else if ( replace_keyword(("if"), ("if ("))) {
             needs_closing_paren = (1);
         }
-        else if (replace_keyword(("import"), ("#include"))) {
+        else if ( replace_keyword(("import"), ("#include"))) {
             printf((" \""));
             read_next_byte();
             needs_closing_imp = (1);
             is_preprocessor_line = (1);
         }
-        else if (get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted) {
+        else if ( get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted) {
             printf(("(\""));
         }
-        else if (replace_keyword((" pass"), (" "))) {
-        
+        else if ( replace_keyword((" pass"), (" "))) {
+            
         }
-        else if (replace_keyword(("not"), ("!"))) {
-        
+        else if ( replace_keyword(("not"), ("!"))) {
+            
         }
-        else if (replace_keyword(("and"), ("&&"))) {
-        
+        else if ( replace_keyword(("and"), ("&&"))) {
+            
         }
-        else if (replace_keyword(("true"), ("(1)"))) {
-        
+        else if ( replace_keyword(("true"), ("(1)"))) {
+            
         }
-        else if (replace_keyword(("false"), ("(0)"))) {
-        
+        else if ( replace_keyword(("false"), ("(0)"))) {
+            
         }
-        else if (replace_keyword(("or"), ("||"))) {
-        
+        else if ( replace_keyword(("or"), ("||"))) {
+            
         }
         else {
             printf(("%c"), get_byte(0));
         }
         
-        if (!is_preprocessor_line) {
+        if ( ! is_preprocessor_line) {
             // Handle closing brace insertion;
-            if (get_byte(0) == '\n') {
+            if ( get_byte(0) == '\n') {
                 while (open_braces && previous_indent > next_line_indent()) {
                     for (unsigned char i = 4; i < previous_indent << 2; i++) {
                         printf((" "));
@@ -200,30 +200,30 @@ int main (int argc, char **argv) {
                 #endif
 
             }
-            if ((get_byte(0) == '"' && !literal && !is_single_quoted)) {
-                if (is_double_quoted) {
+            if ( (get_byte(0) == '"' && !literal && !is_single_quoted)) {
+                if ( is_double_quoted) {
                     printf((")"));
                 }
             }
             
         }
-        if (get_byte(0) == '\n') {
+        if ( get_byte(0) == '\n') {
             is_preprocessor_line = (0);
         }
 
-        if ((get_byte(0) == '#' && !(is_single_quoted || is_double_quoted))) {
+        if ( (get_byte(0) == '#' && !(is_single_quoted || is_double_quoted))) {
             is_preprocessor_line = (1);
         }
 
-        if ((get_byte(0) == '\'' && !literal && !is_double_quoted)) {
+        if ( (get_byte(0) == '\'' && !literal && !is_double_quoted)) {
             is_single_quoted = !is_single_quoted;
         }
 
-        if ((get_byte(0) == '"' && !literal && !is_single_quoted)) {
+        if ( (get_byte(0) == '"' && !literal && !is_single_quoted)) {
             is_double_quoted = !is_double_quoted;
         }
         
-        if (get_byte(0) == '\\' && !literal) {
+        if ( get_byte(0) == '\\' && !literal) {
             literal = (1);
         }
         else {

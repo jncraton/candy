@@ -4,7 +4,7 @@ import string
 import fcntl
 
 #ifdef _WIN32
-#include <io.h>
+import io
 #endif
 
 unsigned char buf[256]
