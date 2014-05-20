@@ -51,7 +51,7 @@ int next_line_indent():
     return false
 
 int is_valid_name_char(unsigned char c):
-    return (c >= 48 and c <= 57) or (c >= 65 and c <= 90) or c == '_'
+    return (c >= 48 and c <= 57) or (c >= 65 and c <= 90) or (c >= 97 and c <= 122) or c == '_'
 
 int replace_keyword(const char* keyword, const char* replacement):
     unsigned char tmp = get_byte(0)
@@ -94,6 +94,26 @@ int main (int argc, char **argv):
     #endif
 
     while (read_next_byte()):
+        if not is_preprocessor_line:
+            // Handle semicolon insertions
+            if (get_byte(0) == '\n' and
+                get_byte(-1) != ';' and
+                get_byte(-1) != ',' and
+                get_byte(-1) != '&' and
+                //get_byte(-1) != '+' and
+                //get_byte(-1) != '-' and
+                get_byte(-1) != '*' and
+                get_byte(-1) != '/' and
+                get_byte(-1) != '>' and
+                get_byte(-1) != '<' and
+                get_byte(-1) != '|' and
+                get_byte(-1) != '{' and
+                get_byte(-1) != '}' and
+                get_byte(-1) != ' ' and
+                get_byte(-1) != '\n' and
+                get_byte(-1) != ':'):
+                printf(";")
+
         if get_byte(0) == ':' and get_byte(1) == '\n':
             if needs_closing_paren:
                 printf(")")
@@ -107,26 +127,28 @@ int main (int argc, char **argv):
             printf("\n")
         else if replace_keyword("if ", "if ("):
             needs_closing_paren = true
-        else if replace_keyword("import ", "#include \""):
+        else if replace_keyword("import", "#include"):
+            printf(" \"")
+            read_next_byte()
             needs_closing_imp = true
             is_preprocessor_line = true
         else if get_byte(0) == '"' and !literal and !is_single_quoted and !is_double_quoted:
             printf("(\"")
         else if replace_keyword("    pass", ""):
             pass
-        else if replace_keyword("not ", "!"):
+        else if replace_keyword("not", "!"):
             pass
-        else if replace_keyword(" and", " &&"):
+        else if replace_keyword("and", "&&"):
             pass
         else if replace_keyword("true", "(1)"):
             pass
         else if replace_keyword("false", "(0)"):
             pass
-        else if replace_keyword(" or", " ||"):
+        else if replace_keyword("or", "||"):
             pass
         else:
             printf("%c", get_byte(0))
-
+        
         if not is_preprocessor_line:
             // Handle closing brace insertion
             if get_byte(0) == '\n':
@@ -147,25 +169,6 @@ int main (int argc, char **argv):
                 if is_double_quoted:
                     printf(")")
             
-            // Handle semicolon insertions
-            if (get_byte(1) == '\n' and
-                get_byte(0) != ';' and
-                get_byte(0) != ',' and
-                get_byte(0) != '&' and
-                //get_byte(0) != '+' and
-                //get_byte(0) != '-' and
-                get_byte(0) != '*' and
-                get_byte(0) != '/' and
-                get_byte(0) != '>' and
-                get_byte(0) != '<' and
-                get_byte(0) != '|' and
-                get_byte(0) != '{' and
-                get_byte(0) != '}' and
-                get_byte(0) != ' ' and
-                get_byte(0) != '\n' and
-                get_byte(0) != ':'):
-                printf(";")
-        
         if get_byte(0) == '\n':
             is_preprocessor_line = false
 

@@ -61,7 +61,7 @@ int next_line_indent() {
 }
 
 int is_valid_name_char(unsigned char c) {
-    return (c >= 48 && c <= 57) || (c >= 65 && c <= 90) || c == '_';
+    return (c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122) || c == '_';
 }
 
 int replace_keyword(const char* keyword, const char* replacement) {
@@ -112,6 +112,28 @@ int main (int argc, char **argv) {
     #endif
 
     while (read_next_byte()) {
+        if (!is_preprocessor_line) {
+            // Handle semicolon insertions;
+            if ((get_byte(0) == '\n' &&
+                get_byte(-1) != ';' &&
+                get_byte(-1) != ',' &&
+                get_byte(-1) != '&' &&
+                //get_byte(-1) != '+' &&
+                //get_byte(-1) != '-' &&
+                get_byte(-1) != '*' &&
+                get_byte(-1) != '/' &&
+                get_byte(-1) != '>' &&
+                get_byte(-1) != '<' &&
+                get_byte(-1) != '|' &&
+                get_byte(-1) != '{' &&
+                get_byte(-1) != '}' &&
+                get_byte(-1) != ' ' &&
+                get_byte(-1) != '\n' &&
+                get_byte(-1) != ':')) {
+                printf((";"));
+            }
+        }
+
         if (get_byte(0) == ':' && get_byte(1) == '\n') {
             if (needs_closing_paren) {
                 printf((")"));
@@ -130,7 +152,9 @@ int main (int argc, char **argv) {
         else if (replace_keyword(("if "), ("if ("))) {
             needs_closing_paren = (1);
         }
-        else if (replace_keyword(("import "), ("#include \""))) {
+        else if (replace_keyword(("import"), ("#include"))) {
+            printf((" \""));
+            read_next_byte();
             needs_closing_imp = (1);
             is_preprocessor_line = (1);
         }
@@ -140,10 +164,10 @@ int main (int argc, char **argv) {
         else if (replace_keyword(("    pass"), (""))) {
         
         }
-        else if (replace_keyword(("not "), ("!"))) {
+        else if (replace_keyword(("not"), ("!"))) {
         
         }
-        else if (replace_keyword((" and"), (" &&"))) {
+        else if (replace_keyword(("and"), ("&&"))) {
         
         }
         else if (replace_keyword(("true"), ("(1)"))) {
@@ -152,13 +176,13 @@ int main (int argc, char **argv) {
         else if (replace_keyword(("false"), ("(0)"))) {
         
         }
-        else if (replace_keyword((" or"), (" ||"))) {
+        else if (replace_keyword(("or"), ("||"))) {
         
         }
         else {
             printf(("%c"), get_byte(0));
         }
-
+        
         if (!is_preprocessor_line) {
             // Handle closing brace insertion;
             if (get_byte(0) == '\n') {
@@ -184,27 +208,7 @@ int main (int argc, char **argv) {
                 }
             }
             
-            // Handle semicolon insertions;
-            if ((get_byte(1) == '\n' &&
-                get_byte(0) != ';' &&
-                get_byte(0) != ',' &&
-                get_byte(0) != '&' &&
-                //get_byte(0) != '+' &&
-                //get_byte(0) != '-' &&
-                get_byte(0) != '*' &&
-                get_byte(0) != '/' &&
-                get_byte(0) != '>' &&
-                get_byte(0) != '<' &&
-                get_byte(0) != '|' &&
-                get_byte(0) != '{' &&
-                get_byte(0) != '}' &&
-                get_byte(0) != ' ' &&
-                get_byte(0) != '\n' &&
-                get_byte(0) != ':')) {
-                printf((";"));
-            }
         }
-        
         if (get_byte(0) == '\n') {
             is_preprocessor_line = (0);
         }
