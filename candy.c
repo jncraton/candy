@@ -15,7 +15,7 @@ unsigned char is_double_quoted = 0;
 unsigned char literal = 0;
 
 int in_regular_code() {
-    return !is_double_quoted && !is_single_quoted && !is_preprocessor_line;
+    return !is_double_quoted&& !is_single_quoted&& !is_preprocessor_line;
 }
 
 void fill_buffer() {
@@ -50,7 +50,7 @@ unsigned char read_next_byte() {
 
 int next_line_indent() {
     for (unsigned char i = 0; i < 255; i++) {
-        if( (get_byte(i) == '\n' && get_byte(i+1) != '\n')) {
+        if( (get_byte(i) == '\n'&& get_byte(i+1) != '\n')) {
             unsigned char count;
             for (count = 0; get_byte(i + count + 1) == ' '; count++);
             return count >> 2;
@@ -69,13 +69,15 @@ int replace_keyword(const char* keyword, const char* replacement) {
         if( get_byte(i) != keyword[i]) {
             return 0;
         }
-        
     }
+    
     printf(replacement);
     
     for (int i = 0; i < strlen(keyword) - 1; i++) {
         read_next_byte();
     }
+    
+    buf[buf_start] = ';';
     
     return 1;
 }
@@ -95,7 +97,7 @@ int main (int argc, char **argv) {
     #endif
 
     while (read_next_byte()) {
-        if( get_byte(0) == ':' && get_byte(1) == '\n') {
+        if( get_byte(0) == ':'&& get_byte(1) == '\n') {
             if( needs_closing_paren) {
                 printf((")"));
                 needs_closing_paren = 0;
@@ -103,31 +105,22 @@ int main (int argc, char **argv) {
             printf((" {"));
             open_braces++;
         }
-        else if( (in_regular_code() && get_byte(0) == 'i' && get_byte(1) == 'f')) {
+        else if( (in_regular_code()&& get_byte(0) == 'i'&& get_byte(1) == 'f')) {
             printf(("if("));
             read_next_byte();
             needs_closing_paren = 1;
         }
-        else if( (get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted)) {
+        else if( (get_byte(0) == '"'&& !literal&& !is_single_quoted&& !is_double_quoted)) {
             printf(("(\""));
         }
-        else if( replace_keyword((" not"), ("!"))) {
-            //
+        else if( (replace_keyword((" not"), ("!")))) {
+            //pass;
         }
-        else if( (in_regular_code() && get_byte(0) == ' ' && get_byte(1) == 'a' && get_byte(2) == 'n' && get_byte(3) == 'd' && (get_byte(4) == ' ' || get_byte(4) == '\n'))) {
-            printf((" &&"));
-            printf(("%c"), get_byte(4));
-            read_next_byte();
-            read_next_byte();
-            read_next_byte();
-            read_next_byte();
+        else if( (replace_keyword((" and"), ("&&")))) {
+            //pass;
         }
-        else if( (in_regular_code() && get_byte(0) == ' ' && get_byte(1) == 'o' && get_byte(2) == 'r' && (get_byte(3) == ' ' || get_byte(3) == '\n'))) {
-            printf((" ||"));
-            printf(("%c"), get_byte(3));
-            read_next_byte();
-            read_next_byte();
-            read_next_byte();
+        else if( (replace_keyword((" or"), ("||")))) {
+            //pass;
         }
         else {
             printf(("%c"), get_byte(0));
@@ -136,7 +129,7 @@ int main (int argc, char **argv) {
         if( !is_preprocessor_line) {
             // Handle closing brace insertion;
             if( get_byte(0) == '\n') {
-                while (open_braces && previous_indent > next_line_indent()) {
+                while (open_braces&& previous_indent > next_line_indent()) {
                     for (unsigned char i = 4; i < previous_indent << 2; i++) {
                         printf((" "));
                     }
@@ -152,28 +145,28 @@ int main (int argc, char **argv) {
                 #endif
 
             }
-            if( (get_byte(0) == '"' && !literal && !is_single_quoted)) {
+            if( (get_byte(0) == '"'&& !literal&& !is_single_quoted)) {
                 if( is_double_quoted) {
                     printf((")"));
                 }
             }
             
             // Handle semicolon insertions;
-            if( (get_byte(1) == '\n' &&
-                get_byte(0) != ';' &&
-                get_byte(0) != ',' &&
-                get_byte(0) != '&' &&
-                //get_byte(0) != '+' &&
-                //get_byte(0) != '-' &&
-                get_byte(0) != '*' &&
-                get_byte(0) != '/' &&
-                get_byte(0) != '>' &&
-                get_byte(0) != '<' &&
-                get_byte(0) != '|' &&
-                get_byte(0) != '{' &&
-                get_byte(0) != '}' &&
-                get_byte(0) != ' ' &&
-                get_byte(0) != '\n' &&
+            if( (get_byte(1) == '\n'&&
+                get_byte(0) != ';'&&
+                get_byte(0) != ','&&
+                get_byte(0) != '&'&&
+                //get_byte(0) != '+'&&
+                //get_byte(0) != '-'&&
+                get_byte(0) != '*'&&
+                get_byte(0) != '/'&&
+                get_byte(0) != '>'&&
+                get_byte(0) != '<'&&
+                get_byte(0) != '|'&&
+                get_byte(0) != '{'&&
+                get_byte(0) != '}'&&
+                get_byte(0) != ' '&&
+                get_byte(0) != '\n'&&
                 get_byte(0) != ':')) {
                 printf((";"));
             }
@@ -183,19 +176,19 @@ int main (int argc, char **argv) {
             is_preprocessor_line = 0;
         }
 
-        if( (get_byte(0) == '#' && !(is_single_quoted || is_double_quoted))) {
+        if( (get_byte(0) == '#'&& !(is_single_quoted || is_double_quoted))) {
             is_preprocessor_line = 1;
         }
 
-        if( (get_byte(0) == '\'' && !literal && !is_double_quoted)) {
+        if( (get_byte(0) == '\''&& !literal&& !is_double_quoted)) {
             is_single_quoted = !is_single_quoted;
         }
 
-        if( (get_byte(0) == '"' && !literal && !is_single_quoted)) {
+        if( (get_byte(0) == '"'&& !literal&& !is_single_quoted)) {
             is_double_quoted = !is_double_quoted;
         }
         
-        if( get_byte(0) == '\\' && !literal) {
+        if( get_byte(0) == '\\'&& !literal) {
             literal = 1;
         }
         else {
