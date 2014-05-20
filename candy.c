@@ -15,11 +15,11 @@ unsigned char is_double_quoted = 0;
 unsigned char literal = 0;
 
 int in_regular_code() {
-    return !is_double_quoted && !is_single_quoted && !is_preprocessor_line;
+    return ! is_double_quoted && ! is_single_quoted && ! is_preprocessor_line;
 }
 
 void fill_buffer() {
-    if( !fread(buf, 1, 255, stdin)) {
+    if( ! fread(buf, 1, 255, stdin)) {
         exit(0);
     }
 }
@@ -33,14 +33,14 @@ unsigned char read_next_byte() {
 
     buf_start++;
 
-    if( !fread(byte, 1, 1, stdin)) {
+    if( ! fread(byte, 1, 1, stdin)) {
         buf[(unsigned char)(buf_start - 1)] = 0x00;
     }
      else {
         buf[(unsigned char)(buf_start - 1)] = byte[0];
     }
 
-    if( !buf[buf_start]) {
+    if( ! buf[buf_start]) {
         return 0;
     }
      else {
