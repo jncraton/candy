@@ -86,9 +86,7 @@ int main (int argc, char **argv):
                 needs_closing_paren = 0
             printf(" {")
             open_braces++
-        else if (in_regular_code() and get_byte(0) == 'i' and get_byte(1) == 'f'):
-            printf("if(")
-            read_next_byte()
+        else if (replace_keyword("if ", "if (")):
             needs_closing_paren = 1
         else if (get_byte(0) == '"' and !literal and !is_single_quoted and !is_double_quoted):
             printf("(\"")
