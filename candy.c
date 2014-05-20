@@ -15,11 +15,11 @@ unsigned char is_double_quoted = 0;
 unsigned char literal = 0;
 
 int in_regular_code() {
-    return ! is_double_quoted && ! is_single_quoted && ! is_preprocessor_line;
+    return !is_double_quoted && !is_single_quoted && !is_preprocessor_line;
 }
 
 void fill_buffer() {
-    if( ! fread(buf, 1, 255, stdin)) {
+    if( !fread(buf, 1, 255, stdin)) {
         exit(0);
     }
 }
@@ -33,14 +33,14 @@ unsigned char read_next_byte() {
 
     buf_start++;
 
-    if( ! fread(byte, 1, 1, stdin)) {
+    if( !fread(byte, 1, 1, stdin)) {
         buf[(unsigned char)(buf_start - 1)] = 0x00;
     }
      else {
         buf[(unsigned char)(buf_start - 1)] = byte[0];
     }
 
-    if( ! buf[buf_start]) {
+    if( !buf[buf_start]) {
         return 0;
     }
      else {
@@ -61,7 +61,7 @@ int next_line_indent() {
         
     }
 int replace_keyword(const char* keyword, const char* replacement) {
-    if( ! in_regular_code()) {
+    if( !in_regular_code()) {
         return 0;
         
     }
@@ -116,7 +116,7 @@ int main (int argc, char **argv) {
         else if( (replace_keyword(("    pass"), (";")))) {
         ;
         }
-        else if( (replace_keyword((" not"), (" !")))) {
+        else if( (replace_keyword(("not "), ("!")))) {
         ;
         }
         else if( (replace_keyword((" and"), (" &&")))) {
@@ -129,7 +129,7 @@ int main (int argc, char **argv) {
             printf(("%c"), get_byte(0));
         }
 
-        if( ! is_preprocessor_line) {
+        if( !is_preprocessor_line) {
             // Handle closing brace insertion;
             if( get_byte(0) == '\n') {
                 while (open_braces && previous_indent > next_line_indent()) {
