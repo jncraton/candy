@@ -147,7 +147,7 @@ int main (int argc, char **argv) {
             }
             printf(("\n"));
         }
-        else if (replace_keyword(("if "), ("if ("))) {
+        else if (replace_keyword(("if"), ("if ("))) {
             needs_closing_paren = (1);
         }
         else if (replace_keyword(("import"), ("#include"))) {
@@ -159,7 +159,7 @@ int main (int argc, char **argv) {
         else if (get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted) {
             printf(("(\""));
         }
-        else if (replace_keyword(("    pass"), (""))) {
+        else if (replace_keyword((" pass"), (" "))) {
         
         }
         else if (replace_keyword(("not"), ("!"))) {

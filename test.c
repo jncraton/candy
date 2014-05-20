@@ -12,13 +12,13 @@ void main() {
     int this_is_false = (0);
     int true_this_is = (1);
     
-    if (do_something || do_something_else) {
-    
+    if ( do_something || do_something_else) {
+        
     }
 
-    if ((some_condition && 
+    if ( (some_condition && 
         another_condition ||
-        !some_other_condition)) {
+        ! some_other_condition)) {
         do_something();
     }
     

@@ -123,7 +123,7 @@ int main (int argc, char **argv):
                 printf(".h\"")
                 needs_closing_imp = false
             printf("\n")
-        else if replace_keyword("if ", "if ("):
+        else if replace_keyword("if", "if ("):
             needs_closing_paren = true
         else if replace_keyword("import", "#include"):
             printf(" \"")
@@ -132,7 +132,7 @@ int main (int argc, char **argv):
             is_preprocessor_line = true
         else if get_byte(0) == '"' and !literal and !is_single_quoted and !is_double_quoted:
             printf("(\"")
-        else if replace_keyword("    pass", ""):
+        else if replace_keyword(" pass", " "):
             pass
         else if replace_keyword("not", "!"):
             pass
