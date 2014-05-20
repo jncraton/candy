@@ -129,7 +129,7 @@ int main (int argc, char **argv) {
             printf(("%c"), get_byte(0));
         }
 
-        if( !is_preprocessor_line) {
+        if( ! is_preprocessor_line) {
             // Handle closing brace insertion;
             if( get_byte(0) == '\n') {
                 while (open_braces && previous_indent > next_line_indent()) {
