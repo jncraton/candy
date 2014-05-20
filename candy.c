@@ -1,7 +1,7 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <fcntl.h>
+#include "stdlib.h"
+#include "stdio.h"
+#include "string.h"
+#include "fcntl.h"
 
 #ifdef _WIN32
 #include <io.h>
@@ -108,7 +108,7 @@ int main (int argc, char **argv) {
         }
         else if (get_byte(0) == '\n') {
             if (needs_closing_imp) {
-                printf((".h>"));
+                printf((".h\""));
                 needs_closing_imp = 0;
             }
             printf(("\n"));
@@ -116,7 +116,7 @@ int main (int argc, char **argv) {
         else if (replace_keyword(("if "), ("if ("))) {
             needs_closing_paren = 1;
         }
-        else if (replace_keyword(("import "), ("#include <"))) {
+        else if (replace_keyword(("import "), ("#include \""))) {
             needs_closing_imp = 1;
             is_preprocessor_line = 1;
         }
