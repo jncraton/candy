@@ -107,9 +107,9 @@ int main (int argc, char **argv):
             pass
         else if replace_keyword(" and", " &&"):
             pass
-        else if replace_keyword("true", "1"):
+        else if replace_keyword("true", "(1)"):
             pass
-        else if replace_keyword("false", "0"):
+        else if replace_keyword("false", "(0)"):
             pass
         else if replace_keyword(" or", " ||"):
             pass
