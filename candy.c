@@ -58,15 +58,23 @@ int next_line_indent() {
     }
 
     return (0);
-        
-    }
+}
+
+int is_valid_name_char(unsigned char c) {
+    return (c >= 48 && c <= 90) || c == '_';
+}
+
 int replace_keyword(const char* keyword, const char* replacement) {
     unsigned char tmp = get_byte(0);
     
     if (!in_regular_code()) {
         return (0);
-        
     }
+    
+    if (is_valid_name_char(get_byte(-1))) {
+        return (0);
+    }
+    
     for (int i = 0; i < strlen(keyword); i++) {
         if (get_byte(i) != keyword[i]) {
             return (0);
