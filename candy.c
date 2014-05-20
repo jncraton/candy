@@ -65,8 +65,6 @@ int is_valid_name_char(unsigned char c) {
 }
 
 int replace_keyword(const char* keyword, const char* replacement) {
-    unsigned char tmp = get_byte(0);
-    
     if (!in_regular_code()) {
         return (0);
     }
@@ -92,7 +90,6 @@ int replace_keyword(const char* keyword, const char* replacement) {
     }
     
     buf[buf_start] = replacement[strlen(replacement) - 1];
-    //buf[buf_start] = tmp;
     
     return (1);
 }
