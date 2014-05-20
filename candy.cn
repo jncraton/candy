@@ -9,7 +9,7 @@ import io
 
 unsigned char buf[256]
 unsigned char buf_start = 255
-unsigned char buf_len = 0;
+unsigned char buf_len = 0
 unsigned char is_preprocessor_line = false
 unsigned char is_single_quoted = false
 unsigned char is_double_quoted = false
