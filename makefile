@@ -1,5 +1,5 @@
 candy.exe: candy.c
-	gcc -std=c99 -Wall -o candy.exe candy.c
+	gcc -std=c99 -s -Os -Wall -o candy.exe candy.c
 	
 candy.c: candy.cn
 	candy < candy.cn > candy.c
