@@ -101,7 +101,7 @@ int main (int argc, char **argv) {
         if (get_byte(0) == ':' && get_byte(1) == '\n') {
             if (needs_closing_paren) {
                 printf((")"));
-                needs_closing_paren = 0;
+                needs_closing_paren = 0
             }
             printf((" {"));
             open_braces++;
@@ -109,16 +109,16 @@ int main (int argc, char **argv) {
         else if (get_byte(0) == '\n') {
             if (needs_closing_imp) {
                 printf((".h\""));
-                needs_closing_imp = 0;
+                needs_closing_imp = 0
             }
             printf(("\n"));
         }
         else if (replace_keyword(("if "), ("if ("))) {
-            needs_closing_paren = 1;
+            needs_closing_paren = 1
         }
         else if (replace_keyword(("import "), ("#include \""))) {
-            needs_closing_imp = 1;
-            is_preprocessor_line = 1;
+            needs_closing_imp = 1
+            is_preprocessor_line = 1
         }
         else if (get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted) {
             printf(("(\""));
@@ -130,6 +130,12 @@ int main (int argc, char **argv) {
         
         }
         else if (replace_keyword((" and"), (" &&"))) {
+        
+        }
+        else if (replace_keyword((" true"), (" 1"))) {
+        
+        }
+        else if (replace_keyword((" false"), (" 0"))) {
         
         }
         else if (replace_keyword((" or"), (" ||"))) {
@@ -186,11 +192,11 @@ int main (int argc, char **argv) {
         }
         
         if (get_byte(0) == '\n') {
-            is_preprocessor_line = 0;
+            is_preprocessor_line = 0
         }
 
         if ((get_byte(0) == '#' && !(is_single_quoted || is_double_quoted))) {
-            is_preprocessor_line = 1;
+            is_preprocessor_line = 1
         }
 
         if ((get_byte(0) == '\'' && !literal && !is_double_quoted)) {
@@ -202,10 +208,10 @@ int main (int argc, char **argv) {
         }
         
         if (get_byte(0) == '\\' && !literal) {
-            literal = 1;
+            literal = 1
         }
         else {
-            literal = 0;
+            literal = 0
         }
         
         line_pos +=1;
