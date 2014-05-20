@@ -61,7 +61,7 @@ int next_line_indent() {
 }
 
 int is_valid_name_char(unsigned char c) {
-    return (c >= 48 && c <= 90) || c == '_';
+    return (c >= 48 && c <= 57) || (c >= 65 && c <= 90) || c == '_';
 }
 
 int replace_keyword(const char* keyword, const char* replacement) {
@@ -72,6 +72,10 @@ int replace_keyword(const char* keyword, const char* replacement) {
     }
     
     if (is_valid_name_char(get_byte(-1))) {
+        return (0);
+    }
+    
+    if (is_valid_name_char(get_byte(strlen(keyword)))) {
         return (0);
     }
     
