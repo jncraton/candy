@@ -9,6 +9,8 @@ void main():
     char dummy3 = "'"
     char dummy3 = "\\\""
     
+    int wrong = false
+    
     if do_something or do_something_else:
         pass
 
