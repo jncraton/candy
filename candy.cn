@@ -7,13 +7,13 @@ import fcntl
 import io
 #endif
 
-unsigned char buf[256]
-unsigned char buf_start = 255
-unsigned char buf_len = 0
-unsigned char is_preprocessor_line = false
-unsigned char is_single_quoted = false
-unsigned char is_double_quoted = false
-unsigned char literal = false
+byte buf[256]
+byte buf_start = 255
+byte buf_len = 0
+byte is_preprocessor_line = false
+byte is_single_quoted = false
+byte is_double_quoted = false
+byte literal = false
 
 int in_regular_code():
     return not is_double_quoted and not is_single_quoted and not is_preprocessor_line
@@ -22,11 +22,11 @@ void fill_buffer():
     if not (buf_len = fread(buf, 1, 254, stdin)):
         exit(0)
 
-unsigned char get_byte(unsigned char i):
-    return buf[(unsigned char)(buf_start + i)]
+byte get_byte(byte i):
+    return buf[(byte)(buf_start + i)]
 
-unsigned char read_next_byte():
-    unsigned char byte[2]
+byte read_next_byte():
+    byte tmp[2]
 
     buf_start++
 
@@ -35,22 +35,22 @@ unsigned char read_next_byte():
     
     buf_len--
     
-    if fread(byte, 1, 1, stdin):
-        buf[(unsigned char)(buf_start - 2)] = byte[0]
+    if fread(tmp, 1, 1, stdin):
+        buf[(byte)(buf_start - 2)] = tmp[0]
         buf_len++
     
     return true
 
 int next_line_indent():
-    for (unsigned char i = 0; i < 255; i++):
+    for (byte i = 0; i < 255; i++):
         if (get_byte(i) == '\n' and get_byte(i+1) != '\n'):
-            unsigned char count
+            byte count
             for (count = 0; get_byte(i + count + 1) == ' '; count++)
             return count >> 2
 
     return false
 
-int is_valid_name_char(unsigned char c):
+int is_valid_name_char(byte c):
     return (c >= 48 and c <= 57) or (c >= 65 and c <= 90) or (c >= 97 and c <= 122) or c == '_'
 
 int replace_keyword(const char* keyword, const char* replacement):
@@ -78,10 +78,10 @@ int replace_keyword(const char* keyword, const char* replacement):
 
 int main (int argc, char **argv):
     int line_pos = false
-    unsigned char open_braces = false
-    unsigned char previous_indent = false
-    unsigned char needs_closing_paren = false
-    unsigned char needs_closing_imp = false
+    byte open_braces = false
+    byte previous_indent = false
+    byte needs_closing_paren = false
+    byte needs_closing_imp = false
 
     fill_buffer()
 
@@ -153,7 +153,7 @@ int main (int argc, char **argv):
             // Handle closing brace insertion
             if get_byte(0) == '\n':
                 while (open_braces and previous_indent > next_line_indent()):
-                    for (unsigned char i = 4; i < previous_indent << 2; i++):
+                    for (byte i = 4; i < previous_indent << 2; i++):
                         printf(" ")
 
                     printf("}\n")

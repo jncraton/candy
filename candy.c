@@ -30,7 +30,7 @@ unsigned char get_byte(unsigned char i) {
 }
 
 unsigned char read_next_byte() {
-    unsigned char byte[2];
+    unsigned char tmp[2];
 
     buf_start++;
 
@@ -40,8 +40,8 @@ unsigned char read_next_byte() {
     
     buf_len--;
     
-    if ( fread(byte, 1, 1, stdin)) {
-        buf[(unsigned char)(buf_start - 2)] = byte[0];
+    if ( fread(tmp, 1, 1, stdin)) {
+        buf[(unsigned char)(buf_start - 2)] = tmp[0];
         buf_len++;
     }
     
