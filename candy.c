@@ -91,7 +91,8 @@ int replace_keyword(const char* keyword, const char* replacement) {
         read_next_byte();
     }
     
-    buf[buf_start] = tmp;
+    buf[buf_start] = replacement[strlen(replacement) - 1];
+    //buf[buf_start] = tmp;
     
     return (1);
 }
