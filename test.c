@@ -9,11 +9,13 @@ void main() {
     char dummy3 = ("'");
     char dummy3 = ("\\\"");
     
+    if( do_something || do_something_else) {
+    }
+
     if( (some_condition && 
         another_condition ||
-        some_other_condition)) {
+        ! some_other_condition)) {
         do_something();
     }
     
     do_something_else();
-}
