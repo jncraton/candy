@@ -46,17 +46,17 @@ int next_line_indent():
             for (count = 0; get_byte(i + count + 1) == ' '; count++)
             return count >> 2
 
-    return 0
+    return false
         
 int replace_keyword(const char* keyword, const char* replacement):
     unsigned char tmp = get_byte(0)
     
     if not in_regular_code():
-        return 0
+        return false
         
     for (int i = 0; i < strlen(keyword); i++):
         if get_byte(i) != keyword[i]:
-            return 0
+            return false
     
     printf(replacement)
     
@@ -65,7 +65,7 @@ int replace_keyword(const char* keyword, const char* replacement):
     
     buf[buf_start] = tmp
     
-    return 1
+    return true
 
 int main (int argc, char **argv):
     int line_pos = false
@@ -174,4 +174,4 @@ int main (int argc, char **argv):
         
         line_pos +=1
 
-    return 0
+    return false

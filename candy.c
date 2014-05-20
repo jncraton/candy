@@ -57,19 +57,19 @@ int next_line_indent() {
         }
     }
 
-    return 0;
+    return (0);
         
     }
 int replace_keyword(const char* keyword, const char* replacement) {
     unsigned char tmp = get_byte(0);
     
     if (!in_regular_code()) {
-        return 0;
+        return (0);
         
     }
     for (int i = 0; i < strlen(keyword); i++) {
         if (get_byte(i) != keyword[i]) {
-            return 0;
+            return (0);
         }
     }
     
@@ -81,7 +81,7 @@ int replace_keyword(const char* keyword, const char* replacement) {
     
     buf[buf_start] = tmp;
     
-    return 1;
+    return (1);
 }
 
 int main (int argc, char **argv) {
@@ -219,5 +219,5 @@ int main (int argc, char **argv) {
         line_pos +=1;
     }
 
-    return 0;
+    return (0);
 }
