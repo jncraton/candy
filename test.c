@@ -22,8 +22,8 @@ void main() {
     }
     
     do_something_else();
-
+    
     while (1) {
-        do_this_a_lot()
+        do_this_a_lot();
     }
 }
