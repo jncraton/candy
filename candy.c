@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <fcntl.h>
 
 #ifdef _WIN32
@@ -57,6 +58,26 @@ int next_line_indent() {
     }
 
     return 0;
+        
+    }
+int replace_keyword(const char* keyword, const char* replacement) {
+    if( !in_regular_code()) {
+        return 0;
+        
+    }
+    for (int i = 0; i < strlen(keyword); i++) {
+        if( get_byte(i) != keyword[i]) {
+            return 0;
+        }
+        
+    }
+    printf(replacement);
+    
+    for (int i = 0; i < strlen(keyword) - 1; i++) {
+        read_next_byte();
+    }
+    
+    return 1;
 }
 
 int main (int argc, char **argv) {
@@ -89,6 +110,9 @@ int main (int argc, char **argv) {
         }
         else if( (get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted)) {
             printf(("(\""));
+        }
+        else if( replace_keyword((" not"), ("!"))) {
+            //
         }
         else if( (in_regular_code() && get_byte(0) == ' ' && get_byte(1) == 'a' && get_byte(2) == 'n' && get_byte(3) == 'd' && (get_byte(4) == ' ' || get_byte(4) == '\n'))) {
             printf((" &&"));
