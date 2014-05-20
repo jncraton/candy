@@ -61,7 +61,7 @@ int next_line_indent() {
         
     }
 int replace_keyword(const char* keyword, const char* replacement) {
-    if( !in_regular_code()) {
+    if(! in_regular_code()) {
         return 0;
         
     }
