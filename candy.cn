@@ -96,9 +96,9 @@ int main (int argc, char **argv):
             pass
         else if (replace_keyword(" not", "!")):
             pass
-        else if (replace_keyword(" and", "&&")):
+        else if (replace_keyword(" and", " &&")):
             pass
-        else if (replace_keyword(" or", "||")):
+        else if (replace_keyword(" or", " ||")):
             pass
         else:
             printf("%c", get_byte(0))
