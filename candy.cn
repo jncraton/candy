@@ -9,6 +9,7 @@ import fcntl
 
 unsigned char buf[256]
 unsigned char buf_start = 255
+unsigned char buf_len = 0;
 unsigned char is_preprocessor_line = false
 unsigned char is_single_quoted = false
 unsigned char is_double_quoted = false
@@ -18,7 +19,7 @@ int in_regular_code():
     return not is_double_quoted and not is_single_quoted and not is_preprocessor_line
 
 void fill_buffer():
-    if not fread(buf, 1, 255, stdin):
+    if not (buf_len = fread(buf, 1, 255, stdin)):
         exit(0)
 
 unsigned char get_byte(unsigned char i):
@@ -29,15 +30,16 @@ unsigned char read_next_byte():
 
     buf_start++
 
-    if not fread(byte, 1, 1, stdin):
-        buf[(unsigned char)(buf_start - 1)] = 0x00
-     else:
-        buf[(unsigned char)(buf_start - 1)] = byte[0]
-
-    if not buf[buf_start]:
+    if not buf_len:
         return false
-     else:
-        return true
+    
+    buf_len--
+    
+    if fread(byte, 1, 1, stdin):
+        buf[(unsigned char)(buf_start - 1)] = byte[0]
+        buf_len++
+    
+    return true
 
 int next_line_indent():
     for (unsigned char i = 0; i < 255; i++):

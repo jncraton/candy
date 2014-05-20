@@ -9,6 +9,7 @@
 
 unsigned char buf[256];
 unsigned char buf_start = 255;
+unsigned char buf_len = 0;
 unsigned char is_preprocessor_line = (0);
 unsigned char is_single_quoted = (0);
 unsigned char is_double_quoted = (0);
@@ -19,7 +20,7 @@ int in_regular_code() {
 }
 
 void fill_buffer() {
-    if (!fread(buf, 1, 255, stdin)) {
+    if (!(buf_len = fread(buf, 1, 255, stdin))) {
         exit(0);
     }
 }
@@ -33,19 +34,18 @@ unsigned char read_next_byte() {
 
     buf_start++;
 
-    if (!fread(byte, 1, 1, stdin)) {
-        buf[(unsigned char)(buf_start - 1)] = 0x00;
-    }
-     else {
-        buf[(unsigned char)(buf_start - 1)] = byte[0];
-    }
-
-    if (!buf[buf_start]) {
+    if (!buf_len) {
         return (0);
     }
-     else {
-        return (1);
+    
+    buf_len--;
+    
+    if (fread(byte, 1, 1, stdin)) {
+        buf[(unsigned char)(buf_start - 1)] = byte[0];
+        buf_len++;
     }
+    
+    return (1);
 }
 
 int next_line_indent() {
