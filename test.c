@@ -10,6 +10,7 @@ void main() {
     char dummy3 = ("\\\"");
     
     if( do_something || do_something_else) {
+    ;
     }
 
     if( (some_condition && 

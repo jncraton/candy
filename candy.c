@@ -113,13 +113,17 @@ int main (int argc, char **argv) {
         else if( (get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted)) {
             printf(("(\""));
         }
-        else if( (replace_keyword(("    pass\n"), ("}\n")))) {
+        else if( (replace_keyword(("    pass"), (";")))) {
+        ;
         }
         else if( (replace_keyword((" not"), (" !")))) {
+        ;
         }
         else if( (replace_keyword((" and"), (" &&")))) {
+        ;
         }
         else if( (replace_keyword((" or"), (" ||")))) {
+        ;
         }
         else {
             printf(("%c"), get_byte(0));
