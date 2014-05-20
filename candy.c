@@ -87,6 +87,7 @@ int main (int argc, char **argv) {
     unsigned char open_braces = 0;
     unsigned char previous_indent = 0;
     unsigned char needs_closing_paren = 0;
+    unsigned char needs_closing_imp = 0;
 
     fill_buffer();
 
@@ -105,11 +106,19 @@ int main (int argc, char **argv) {
             printf((" {"));
             open_braces++;
         }
+        else if (get_byte(0) == '\n') {
+            if (needs_closing_imp) {
+                printf((".h>"));
+                needs_closing_imp = 0;
+            }
+            printf(("\n"));
+        }
         else if (replace_keyword(("if "), ("if ("))) {
             needs_closing_paren = 1;
         }
-        else if (replace_keyword(("import "), ("#include "))) {
-        
+        else if (replace_keyword(("import "), ("#include <"))) {
+            needs_closing_imp = 1;
+            is_preprocessor_line = 1;
         }
         else if (get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted) {
             printf(("(\""));
