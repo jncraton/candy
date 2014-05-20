@@ -105,22 +105,22 @@ int main (int argc, char **argv) {
             printf((" {"));
             open_braces++;
         }
-        else if ((replace_keyword(("if "), ("if (")))) {
+        else if (replace_keyword(("if "), ("if ("))) {
             needs_closing_paren = 1;
         }
-        else if ((get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted)) {
+        else if (get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted) {
             printf(("(\""));
         }
-        else if ((replace_keyword(("    pass"), (";")))) {
+        else if (replace_keyword(("    pass"), (";"))) {
         ;
         }
-        else if ((replace_keyword(("not "), ("!")))) {
+        else if (replace_keyword(("not "), ("!"))) {
         ;
         }
-        else if ((replace_keyword((" and"), (" &&")))) {
+        else if (replace_keyword((" and"), (" &&"))) {
         ;
         }
-        else if ((replace_keyword((" or"), (" ||")))) {
+        else if (replace_keyword((" or"), (" ||"))) {
         ;
         }
         else {
