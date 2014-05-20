@@ -61,6 +61,8 @@ int next_line_indent() {
         
     }
 int replace_keyword(const char* keyword, const char* replacement) {
+    unsigned char tmp = get_byte(0);
+    
     if (!in_regular_code()) {
         return 0;
         
@@ -77,7 +79,7 @@ int replace_keyword(const char* keyword, const char* replacement) {
         read_next_byte();
     }
     
-    buf[buf_start] = ';';
+    buf[buf_start] = tmp;
     
     return 1;
 }
