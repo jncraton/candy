@@ -20,7 +20,7 @@ int in_regular_code() {
 }
 
 void fill_buffer() {
-    if (!(buf_len = fread(buf, 1, 255, stdin))) {
+    if (!(buf_len = fread(buf, 1, 254, stdin))) {
         exit(0);
     }
 }
@@ -41,7 +41,7 @@ unsigned char read_next_byte() {
     buf_len--;
     
     if (fread(byte, 1, 1, stdin)) {
-        buf[(unsigned char)(buf_start - 1)] = byte[0];
+        buf[(unsigned char)(buf_start - 2)] = byte[0];
         buf_len++;
     }
     
