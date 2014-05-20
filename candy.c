@@ -132,13 +132,13 @@ int main (int argc, char **argv) {
         else if (replace_keyword((" and"), (" &&"))) {
         
         }
-        else if (replace_keyword(("true\n"), ("1;"))) {
+        else if (replace_keyword(("true\n"), ("1;\n"))) {
         
         }
         else if (replace_keyword(("true"), ("1"))) {
         
         }
-        else if (replace_keyword(("false\n"), ("0;"))) {
+        else if (replace_keyword(("false\n"), ("0;\n"))) {
         
         }
         else if (replace_keyword(("false"), ("0"))) {
