@@ -17,8 +17,8 @@ byte literal = false
 
 int in_regular_code():
     return not is_double_quoted and 
-            not is_single_quoted and 
-            not is_preprocessor_line
+           not is_single_quoted and 
+           not is_preprocessor_line
 
 void fill_buffer():
     buf_len = fread(buf, 1, 254, stdin)
@@ -60,9 +60,26 @@ int next_line_indent():
 
 int is_valid_name_char(byte c):
     return (c >= 48 and c <= 57) or 
-            (c >= 65 and c <= 90) or 
-            (c >= 97 and c <= 122) or 
-            c == '_'
+           (c >= 65 and c <= 90) or 
+           (c >= 97 and c <= 122) or 
+           (c == '_')
+
+int is_separator(byte c):
+    return ( c == ';' or
+             c == ',' or
+             c == '&' or
+             //c == '+' or
+             //c == '-' or
+             c == '*' or
+             c == '/' or
+             c == '>' or
+             c == '<' or
+             c == '|' or
+             c == '{' or
+             c == '}' or
+             c == ' ' or
+             c == '\n' or
+             c == ':')
 
 int buf_starts_with(char* keyword):
     for (int i = 0; i < strlen(keyword); i++):
@@ -111,22 +128,8 @@ int main (int argc, char **argv):
     while (read_next_byte()):
         if not is_preprocessor_line:
             // Handle semicolon insertions
-            if (get_byte(0) == '\n' and
-                get_byte(-1) != ';' and
-                get_byte(-1) != ',' and
-                get_byte(-1) != '&' and
-                //get_byte(-1) != '+' and
-                //get_byte(-1) != '-' and
-                get_byte(-1) != '*' and
-                get_byte(-1) != '/' and
-                get_byte(-1) != '>' and
-                get_byte(-1) != '<' and
-                get_byte(-1) != '|' and
-                get_byte(-1) != '{' and
-                get_byte(-1) != '}' and
-                get_byte(-1) != ' ' and
-                get_byte(-1) != '\n' and
-                get_byte(-1) != ':'):
+            if (get_byte(0) == '\n' and 
+                not is_separator(get_byte(-1))):
                 printf(";")
 
         if get_byte(0) == ':' and get_byte(1) == '\n':

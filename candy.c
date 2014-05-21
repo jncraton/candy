@@ -17,9 +17,9 @@ unsigned char literal = (0);
 
 int in_regular_code() {
     return ! is_double_quoted && 
-            ! is_single_quoted && 
-            ! is_preprocessor_line;
-        }
+           ! is_single_quoted && 
+           ! is_preprocessor_line;
+    }
 
 void fill_buffer() {
     buf_len = fread(buf, 1, 254, stdin);
@@ -71,9 +71,27 @@ int next_line_indent() {
 
 int is_valid_name_char(unsigned char c) {
     return (c >= 48 && c <= 57) || 
-            (c >= 65 && c <= 90) || 
-            (c >= 97 && c <= 122) || 
-            c == '_';
+           (c >= 65 && c <= 90) || 
+           (c >= 97 && c <= 122) || 
+           (c == '_');
+    }
+
+int is_separator(unsigned char c) {
+    return ( c == ';' ||
+             c == ',' ||
+             c == '&' ||
+             //c == '+' ||
+             //c == '-' ||
+             c == '*' ||
+             c == '/' ||
+             c == '>' ||
+             c == '<' ||
+             c == '|' ||
+             c == '{' ||
+             c == '}' ||
+             c == ' ' ||
+             c == '\n' ||
+             c == ':');
         }
 
 int buf_starts_with(char* keyword) {
@@ -132,22 +150,8 @@ int main (int argc, char **argv) {
     while (read_next_byte()) {
         if ( ! is_preprocessor_line) {
             // Handle semicolon insertions;
-            if ( (get_byte(0) == '\n' &&
-                get_byte(-1) != ';' &&
-                get_byte(-1) != ',' &&
-                get_byte(-1) != '&' &&
-                //get_byte(-1) != '+' &&
-                //get_byte(-1) != '-' &&
-                get_byte(-1) != '*' &&
-                get_byte(-1) != '/' &&
-                get_byte(-1) != '>' &&
-                get_byte(-1) != '<' &&
-                get_byte(-1) != '|' &&
-                get_byte(-1) != '{' &&
-                get_byte(-1) != '}' &&
-                get_byte(-1) != ' ' &&
-                get_byte(-1) != '\n' &&
-                get_byte(-1) != ':')) {
+            if ( (get_byte(0) == '\n' && 
+                ! is_separator(get_byte(-1)))) {
                 printf((";"));
             }
         }
