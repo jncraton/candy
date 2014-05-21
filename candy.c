@@ -76,7 +76,7 @@ int is_valid_name_char(unsigned char c) {
             c == '_';
         }
 
-int replace_keyword(const char* keyword, const char* replacement) {
+int replace_keyword(char* keyword, char* replacement) {
     if ( ! in_regular_code()) {
         return (0);
     }

@@ -64,7 +64,7 @@ int is_valid_name_char(byte c):
             (c >= 97 and c <= 122) or 
             c == '_'
 
-int replace_keyword(const char* keyword, const char* replacement):
+int replace_keyword(char* keyword, char* replacement):
     if not in_regular_code():
         return false
     
