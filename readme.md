@@ -19,7 +19,8 @@ looks a little more like Python.
 - Optional parens around if statements
 - Optional parens for a function passed a single contstant string (e.g. `printf "hello, world"` is valid)
 - Semicolons are optional at the end of a line
-- Supports "and" and "or" as operators
+- Supports "and", "or", and "not" as operators
+- `import` rather than `#include`
 
 Usage
 -----
