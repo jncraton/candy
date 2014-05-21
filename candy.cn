@@ -19,7 +19,9 @@ int in_regular_code():
     return not is_double_quoted and not is_single_quoted and not is_preprocessor_line
 
 void fill_buffer():
-    if not (buf_len = fread(buf, 1, 254, stdin)):
+    buf_len = fread(buf, 1, 254, stdin)
+    
+    if not buf_len:
         exit(0)
 
 byte get_byte(byte i):

@@ -20,7 +20,9 @@ int in_regular_code() {
 }
 
 void fill_buffer() {
-    if ( ! (buf_len = fread(buf, 1, 254, stdin))) {
+    buf_len = fread(buf, 1, 254, stdin);
+    
+    if ( ! buf_len) {
         exit(0);
     }
 }
