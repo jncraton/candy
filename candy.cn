@@ -27,10 +27,11 @@ void fill_buffer():
 byte get_byte(byte i):
     return buf[(byte)(buf_start + i)]
 
+void set_byte(byte i, byte val):
+    buf[(byte)(buf_start + i)] = val
+
 byte read_next_byte():
     byte tmp[2]
-
-    buf_start++
 
     if not buf_len:
         return false
@@ -38,9 +39,11 @@ byte read_next_byte():
     buf_len--
     
     if fread(tmp, 1, 1, stdin):
-        buf[(byte)(buf_start - 2)] = tmp[0]
+        set_byte(-1, tmp[0])
         buf_len++
     
+    buf_start++
+
     return true
 
 int next_line_indent():

@@ -31,10 +31,12 @@ unsigned char get_byte(unsigned char i) {
     return buf[(unsigned char)(buf_start + i)];
 }
 
+void set_byte(unsigned char i, unsigned char val) {
+    buf[(unsigned char)(buf_start + i)] = val;
+}
+
 unsigned char read_next_byte() {
     unsigned char tmp[2];
-
-    buf_start++;
 
     if ( ! buf_len) {
         return (0);
@@ -43,10 +45,12 @@ unsigned char read_next_byte() {
     buf_len--;
     
     if ( fread(tmp, 1, 1, stdin)) {
-        buf[(unsigned char)(buf_start - 2)] = tmp[0];
+        set_byte(-1, tmp[0]);
         buf_len++;
     }
     
+    buf_start++;
+
     return (1);
 }
 
