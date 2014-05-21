@@ -188,7 +188,7 @@ int main (int argc, char **argv):
         if get_byte(0) == '\n':
             is_preprocessor_line = false
 
-        if (get_byte(0) == '#' and !(is_single_quoted || is_double_quoted)):
+        if (get_byte(0) == '#' and !(is_single_quoted or is_double_quoted)):
             is_preprocessor_line = true
 
         if (get_byte(0) == '\'' and !literal and !is_double_quoted):
