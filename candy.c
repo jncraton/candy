@@ -1,4 +1,3 @@
-#include "stdlib.h"
 #include "stdio.h"
 #include "string.h"
 #include "fcntl.h"
@@ -23,10 +22,6 @@ int in_regular_code() {
 
 void fill_buffer() {
     buf_len = fread(buf, 1, 254, stdin);
-    
-    if ( ! buf_len) {
-        exit(0);
-    }
 }
 
 unsigned char get_byte(unsigned char i) {

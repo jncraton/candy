@@ -1,4 +1,3 @@
-import stdlib
 import stdio
 import string
 import fcntl
@@ -22,9 +21,6 @@ int in_regular_code():
 
 void fill_buffer():
     buf_len = fread(buf, 1, 254, stdin)
-    
-    if not buf_len:
-        exit(0)
 
 byte get_byte(byte i):
     return buf[(byte)(buf_start + i)]
