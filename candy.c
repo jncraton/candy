@@ -225,19 +225,19 @@ int main (int argc, char **argv) {
             is_preprocessor_line = (0);
         }
 
-        if ( (get_byte(0) == '#' && !(is_single_quoted || is_double_quoted))) {
+        if ( (get_byte(0) == '#' && ! (is_single_quoted || is_double_quoted))) {
             is_preprocessor_line = (1);
         }
 
-        if ( (get_byte(0) == '\'' && !literal && !is_double_quoted)) {
+        if ( get_byte(0) == '\'' && ! (literal || is_double_quoted)) {
             is_single_quoted = !is_single_quoted;
         }
 
-        if ( (get_byte(0) == '"' && !literal && !is_single_quoted)) {
+        if ( get_byte(0) == '"' && ! (literal || is_single_quoted)) {
             is_double_quoted = !is_double_quoted;
         }
         
-        if ( get_byte(0) == '\\' && !literal) {
+        if ( get_byte(0) == '\\' && ! literal) {
             literal = (1);
         }
         else {
