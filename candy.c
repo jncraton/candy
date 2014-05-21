@@ -214,7 +214,7 @@ int main (int argc, char **argv) {
                 previous_indent = next_line_indent();
             }
 
-            if ( (get_byte(0) == '"' && !literal && !is_single_quoted)) {
+            if ( get_byte(0) == '"' && ! (literal || is_single_quoted)) {
                 if ( is_double_quoted) {
                     printf((")"));
                 }
@@ -230,11 +230,11 @@ int main (int argc, char **argv) {
         }
 
         if ( get_byte(0) == '\'' && ! (literal || is_double_quoted)) {
-            is_single_quoted = !is_single_quoted;
+            is_single_quoted = ! is_single_quoted;
         }
 
         if ( get_byte(0) == '"' && ! (literal || is_single_quoted)) {
-            is_double_quoted = !is_double_quoted;
+            is_double_quoted = ! is_double_quoted;
         }
         
         if ( get_byte(0) == '\\' && ! literal) {
