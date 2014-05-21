@@ -19,13 +19,13 @@ int in_regular_code():
            not is_single_quoted and 
            not is_preprocessor_line
 
-void fill_buffer():
+def fill_buffer():
     buf_len = fread(buf, 1, 254, stdin)
 
 byte get_byte(byte i):
     return buf[(byte)(buf_start + i)]
 
-void set_byte(byte i, byte val):
+def set_byte(byte i, byte val):
     buf[(byte)(buf_start + i)] = val
 
 byte read_next_byte():
@@ -106,7 +106,7 @@ int replace_keyword(char* keyword, char* replacement):
     
     return true
 
-void automatic_semicolon():
+def automatic_semicolon():
     if (get_byte(0) == '\n' and 
         not is_preprocessor_line and
         not is_separator(get_byte(-1))):
