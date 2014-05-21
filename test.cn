@@ -1,7 +1,7 @@
 import stdlib
 import stdio
 
-void main():
+def main():
     printf "Hello, world!"
     
     byte dummy = '"'

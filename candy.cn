@@ -119,6 +119,7 @@ int do_replacements():
             replace_keyword("true", "(1)") or
             replace_keyword("false", "(0)") or
             replace_keyword("or", "||") or
+            replace_keyword("def", "void") or
             replace_keyword("byte", "unsigned char"))
 
 int main (int argc, char **argv):

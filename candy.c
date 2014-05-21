@@ -142,6 +142,7 @@ int do_replacements() {
             replace_keyword(("true"), ("(1)")) ||
             replace_keyword(("false"), ("(0)")) ||
             replace_keyword(("or"), ("||")) ||
+            replace_keyword(("def"), ("void")) ||
             replace_keyword(("byte"), ("unsigned char")));
         }
 
