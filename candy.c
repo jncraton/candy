@@ -216,11 +216,8 @@ int main (int argc, char **argv) {
                 }
 
                 previous_indent = next_line_indent();
-                #ifdef debug
-                printf(("// Next indent level: %d\n"), previous_indent);
-                #endif
-
             }
+
             if ( (get_byte(0) == '"' && !literal && !is_single_quoted)) {
                 if ( is_double_quoted) {
                     printf((")"));
