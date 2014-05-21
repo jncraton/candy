@@ -225,7 +225,7 @@ int main (int argc, char **argv) {
             is_preprocessor_line = (0);
         }
 
-        if ( (get_byte(0) == '#' && ! (is_single_quoted || is_double_quoted))) {
+        if ( get_byte(0) == '#' && in_regular_code()) {
             is_preprocessor_line = (1);
         }
 
