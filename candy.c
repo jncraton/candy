@@ -16,8 +16,10 @@ unsigned char is_double_quoted = (0);
 unsigned char literal = (0);
 
 int in_regular_code() {
-    return ! is_double_quoted && ! is_single_quoted && ! is_preprocessor_line;
-}
+    return ! is_double_quoted && 
+            ! is_single_quoted && 
+            ! is_preprocessor_line;
+        }
 
 void fill_buffer() {
     buf_len = fread(buf, 1, 254, stdin);
@@ -58,6 +60,7 @@ int next_line_indent() {
     for (unsigned char i = 0; i < 254; i++) {
         if ( (get_byte(i) == '\n' && get_byte(i+1) != '\n')) {
             unsigned char j;
+            
             for (j = 0; get_byte(i + j + 1) == ' '; j++);
             return j >> 2;
         }
@@ -67,8 +70,11 @@ int next_line_indent() {
 }
 
 int is_valid_name_char(unsigned char c) {
-    return (c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122) || c == '_';
-}
+    return (c >= 48 && c <= 57) || 
+            (c >= 65 && c <= 90) || 
+            (c >= 97 && c <= 122) || 
+            c == '_';
+        }
 
 int replace_keyword(const char* keyword, const char* replacement) {
     if ( ! in_regular_code()) {
