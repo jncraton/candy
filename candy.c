@@ -132,6 +132,14 @@ int replace_keyword(char* keyword, char* replacement) {
     return (1);
 }
 
+void automatic_semicolon() {
+    if ( (get_byte(0) == '\n' && 
+        ! is_preprocessor_line &&
+        ! is_separator(get_byte(-1)))) {
+        printf((";"));
+    }
+}
+
 int main (int argc, char **argv) {
     int line_pos = (0);
     unsigned char open_braces = (0);
@@ -148,13 +156,7 @@ int main (int argc, char **argv) {
     #endif
 
     while (read_next_byte()) {
-        if ( ! is_preprocessor_line) {
-            // Handle semicolon insertions;
-            if ( (get_byte(0) == '\n' && 
-                ! is_separator(get_byte(-1)))) {
-                printf((";"));
-            }
-        }
+        automatic_semicolon();
 
         if ( get_byte(0) == ':' && get_byte(1) == '\n') {
             if ( needs_closing_paren) {
