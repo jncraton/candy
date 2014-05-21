@@ -192,7 +192,7 @@ int main (int argc, char **argv) {
             needs_closing_imp = (1);
             is_preprocessor_line = (1);
         }
-        else if ( get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted) {
+        else if ( get_byte(0) == '"' && in_regular_code()) {
             printf(("(\""));
         }
         else if ( do_replacements()) {

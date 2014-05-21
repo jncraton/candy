@@ -161,7 +161,7 @@ int main (int argc, char **argv):
             read_next_byte()
             needs_closing_imp = true
             is_preprocessor_line = true
-        else if get_byte(0) == '"' and !literal and !is_single_quoted and !is_double_quoted:
+        else if get_byte(0) == '"' and in_regular_code():
             printf("(\"")
         else if do_replacements():
             pass
