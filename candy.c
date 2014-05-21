@@ -55,11 +55,11 @@ unsigned char read_next_byte() {
 }
 
 int next_line_indent() {
-    for (unsigned char i = 0; i < 255; i++) {
+    for (unsigned char i = 0; i < 254; i++) {
         if ( (get_byte(i) == '\n' && get_byte(i+1) != '\n')) {
-            unsigned char count;
-            for (count = 0; get_byte(i + count + 1) == ' '; count++);
-            return count >> 2;
+            unsigned char j;
+            for (j = 0; get_byte(i + j + 1) == ' '; j++);
+            return j >> 2;
         }
     }
 
