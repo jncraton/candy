@@ -64,6 +64,13 @@ int is_valid_name_char(byte c):
             (c >= 97 and c <= 122) or 
             c == '_'
 
+int buf_starts_with(char* keyword):
+    for (int i = 0; i < strlen(keyword); i++):
+        if get_byte(i) != keyword[i]:
+            return false
+        
+    return true
+
 int replace_keyword(char* keyword, char* replacement):
     if not in_regular_code():
         return false
@@ -74,16 +81,15 @@ int replace_keyword(char* keyword, char* replacement):
     if is_valid_name_char(get_byte(strlen(keyword))):
         return false
     
-    for (int i = 0; i < strlen(keyword); i++):
-        if get_byte(i) != keyword[i]:
-            return false
-    
+    if !buf_starts_with(keyword):
+        return false
+        
     printf(replacement)
     
     for (int i = 0; i < strlen(keyword) - 1; i++):
         read_next_byte()
     
-    buf[buf_start] = replacement[strlen(replacement) - 1]
+    set_byte(0, replacement[strlen(replacement) - 1])
     
     return true
 

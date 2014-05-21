@@ -76,6 +76,16 @@ int is_valid_name_char(unsigned char c) {
             c == '_';
         }
 
+int buf_starts_with(char* keyword) {
+    for (int i = 0; i < strlen(keyword); i++) {
+        if ( get_byte(i) != keyword[i]) {
+            return (0);
+        }
+        
+    }
+    return (1);
+}
+
 int replace_keyword(char* keyword, char* replacement) {
     if ( ! in_regular_code()) {
         return (0);
@@ -89,19 +99,17 @@ int replace_keyword(char* keyword, char* replacement) {
         return (0);
     }
     
-    for (int i = 0; i < strlen(keyword); i++) {
-        if ( get_byte(i) != keyword[i]) {
-            return (0);
-        }
+    if ( !buf_starts_with(keyword)) {
+        return (0);
+        
     }
-    
     printf(replacement);
     
     for (int i = 0; i < strlen(keyword) - 1; i++) {
         read_next_byte();
     }
     
-    buf[buf_start] = replacement[strlen(replacement) - 1];
+    set_byte(0, replacement[strlen(replacement) - 1]);
     
     return (1);
 }
