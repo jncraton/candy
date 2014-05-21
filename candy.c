@@ -140,6 +140,16 @@ void automatic_semicolon() {
     }
 }
 
+int do_replacements() {
+    return (replace_keyword((" pass"), (" ")) ||
+            replace_keyword(("not"), ("!")) ||
+            replace_keyword(("and"), ("&&")) ||
+            replace_keyword(("true"), ("(1)")) ||
+            replace_keyword(("false"), ("(0)")) ||
+            replace_keyword(("or"), ("||")) ||
+            replace_keyword(("byte"), ("unsigned char")));
+        }
+
 int main (int argc, char **argv) {
     int line_pos = (0);
     unsigned char open_braces = (0);
@@ -185,25 +195,7 @@ int main (int argc, char **argv) {
         else if ( get_byte(0) == '"' && !literal && !is_single_quoted && !is_double_quoted) {
             printf(("(\""));
         }
-        else if ( replace_keyword((" pass"), (" "))) {
-            
-        }
-        else if ( replace_keyword(("not"), ("!"))) {
-            
-        }
-        else if ( replace_keyword(("and"), ("&&"))) {
-            
-        }
-        else if ( replace_keyword(("true"), ("(1)"))) {
-            
-        }
-        else if ( replace_keyword(("false"), ("(0)"))) {
-            
-        }
-        else if ( replace_keyword(("or"), ("||"))) {
-            
-        }
-        else if ( replace_keyword(("byte"), ("unsigned char"))) {
+        else if ( do_replacements()) {
             
         }
         else {

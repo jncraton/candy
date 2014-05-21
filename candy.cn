@@ -116,6 +116,15 @@ void automatic_semicolon():
         not is_separator(get_byte(-1))):
         printf(";")
 
+int do_replacements():
+    return (replace_keyword(" pass", " ") or
+            replace_keyword("not", "!") or
+            replace_keyword("and", "&&") or
+            replace_keyword("true", "(1)") or
+            replace_keyword("false", "(0)") or
+            replace_keyword("or", "||") or
+            replace_keyword("byte", "unsigned char"))
+
 int main (int argc, char **argv):
     int line_pos = false
     byte open_braces = false
@@ -154,19 +163,7 @@ int main (int argc, char **argv):
             is_preprocessor_line = true
         else if get_byte(0) == '"' and !literal and !is_single_quoted and !is_double_quoted:
             printf("(\"")
-        else if replace_keyword(" pass", " "):
-            pass
-        else if replace_keyword("not", "!"):
-            pass
-        else if replace_keyword("and", "&&"):
-            pass
-        else if replace_keyword("true", "(1)"):
-            pass
-        else if replace_keyword("false", "(0)"):
-            pass
-        else if replace_keyword("or", "||"):
-            pass
-        else if replace_keyword("byte", "unsigned char"):
+        else if do_replacements():
             pass
         else:
             printf("%c", get_byte(0))
