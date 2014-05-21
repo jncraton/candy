@@ -51,7 +51,7 @@ unsigned char read_next_byte() {
     return (1);
 }
 
-int next_line_indent() {
+int next_indent() {
     for (unsigned char i = 0; i < 254; i++) {
         if ( (get_byte(i) == '\n' && get_byte(i+1) != '\n')) {
             unsigned char j;
@@ -149,7 +149,7 @@ int do_replacements() {
 int main (int argc, char **argv) {
     int line_pos = (0);
     unsigned char open_braces = (0);
-    unsigned char previous_indent = (0);
+    unsigned char indent_level = (0);
     unsigned char needs_closing_paren = (0);
     unsigned char needs_closing_imp = (0);
 
@@ -201,17 +201,17 @@ int main (int argc, char **argv) {
         if ( ! is_preprocessor_line) {
             // Handle closing brace insertion;
             if ( get_byte(0) == '\n') {
-                while (open_braces && previous_indent > next_line_indent()) {
-                    for (unsigned char i = 4; i < previous_indent << 2; i++) {
+                while (open_braces && indent_level > next_indent()) {
+                    for (unsigned char i = 4; i < indent_level << 2; i++) {
                         printf((" "));
                     }
 
                     printf(("}\n"));
-                    previous_indent--;
+                    indent_level--;
                     open_braces--;
                 }
 
-                previous_indent = next_line_indent();
+                indent_level = next_indent();
             }
 
             if ( get_byte(0) == '"' && ! (literal || is_single_quoted)) {

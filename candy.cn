@@ -44,7 +44,7 @@ byte read_next_byte():
 
     return true
 
-int next_line_indent():
+int next_indent():
     for (byte i = 0; i < 254; i++):
         if (get_byte(i) == '\n' and get_byte(i+1) != '\n'):
             byte j
@@ -125,7 +125,7 @@ int do_replacements():
 int main (int argc, char **argv):
     int line_pos = false
     byte open_braces = false
-    byte previous_indent = false
+    byte indent_level = false
     byte needs_closing_paren = false
     byte needs_closing_imp = false
 
@@ -168,15 +168,15 @@ int main (int argc, char **argv):
         if not is_preprocessor_line:
             // Handle closing brace insertion
             if get_byte(0) == '\n':
-                while (open_braces and previous_indent > next_line_indent()):
-                    for (byte i = 4; i < previous_indent << 2; i++):
+                while (open_braces and indent_level > next_indent()):
+                    for (byte i = 4; i < indent_level << 2; i++):
                         printf(" ")
 
                     printf("}\n")
-                    previous_indent--
+                    indent_level--
                     open_braces--
 
-                previous_indent = next_line_indent()
+                indent_level = next_indent()
 
             if get_byte(0) == '"' and not (literal or is_single_quoted):
                 if is_double_quoted:
