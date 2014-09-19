@@ -152,6 +152,7 @@ int main (int argc, char **argv) {
     unsigned char needs_closing_paren = (0);
     unsigned char needs_closing_imp = (0);
     unsigned char needs_semi = (0);
+    unsigned char needs_newline = (1);
     in = fopen(argv[argc-2], ("r"));
     out = fopen(argv[argc-1], ("wb"));
 
@@ -198,7 +199,13 @@ int main (int argc, char **argv) {
                     is_preprocessor_line = (1);
                 }
                 else {
-                    fprintf(out, ("%c"), get_byte(0));
+                    if ( get_byte(0) != '\n' || needs_newline) {
+                        fprintf(out, ("%c"), get_byte(0));
+                        needs_newline = (1);
+                    }
+                    if ( get_byte(0) == '\n') {
+                        needs_newline = (0);
+                    }
                 }
             }
         }

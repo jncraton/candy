@@ -131,6 +131,7 @@ int main (int argc, char **argv):
     byte needs_closing_paren = false
     byte needs_closing_imp = false
     byte needs_semi = false
+    byte needs_newline = true
     in = fopen(argv[argc-2], "r")
     out = fopen(argv[argc-1], "wb")
 
@@ -168,7 +169,11 @@ int main (int argc, char **argv):
                     needs_closing_imp = true
                     is_preprocessor_line = true
                 else:
-                    fprintf(out, "%c", get_byte(0))
+                    if get_byte(0) != '\n' or needs_newline:
+                        fprintf(out, "%c", get_byte(0))
+                        needs_newline = true
+                    if get_byte(0) == '\n':
+                        needs_newline = false
     else:
         char * header_name = argv[argc-1]
         header_name[strlen(header_name) - 1] = 'h'
