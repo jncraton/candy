@@ -15,3 +15,4 @@ test: candy.exe
 	@candy.exe test.cn test_out.c
 	@candy.exe test.cn test_out.h
 	@cmp test_out.c test.c
+	@cmp test_out.h test.h
