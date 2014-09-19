@@ -3,6 +3,7 @@ candy.exe: candy.c
 	
 candy.c: candy.cn
 	candy_stable candy.cn candy.c
+	candy_stable candy.cn candy.h
 	
 clean:
 	rm candy.exe

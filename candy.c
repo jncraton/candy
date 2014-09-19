@@ -1,20 +1,17 @@
-#include "stdio.h"
-#include "string.h"
-#include "fcntl.h"
+#include "candy.h"
 
 #ifdef _WIN32
-#include "io.h"
 #endif
 
-unsigned char buf[256];
-unsigned char buf_start = 255;
-unsigned char buf_len = 0;
-unsigned char is_preprocessor_line = (0);
-unsigned char is_single_quoted = (0);
-unsigned char is_double_quoted = (0);
-unsigned char literal = (0);
-FILE* in;
-FILE* out;
+    unsigned char buf[256];
+    unsigned char buf_start = 255;
+    unsigned char buf_len = 0;
+    unsigned char is_preprocessor_line = (0);
+    unsigned char is_single_quoted = (0);
+    unsigned char is_double_quoted = (0);
+    unsigned char literal = (0);
+    FILE* in;
+    FILE* out;
 
 int in_regular_code() {
     return ! is_double_quoted && 
@@ -154,20 +151,26 @@ int main (int argc, char **argv) {
     unsigned char indent_level = (0);
     unsigned char needs_closing_paren = (0);
     unsigned char needs_closing_imp = (0);
+    unsigned char needs_semi = (0);
     in = fopen(argv[argc-2], ("r"));
     out = fopen(argv[argc-1], ("wb"));
 
     fill_buffer();
 
-    while (read_next_byte()) {
-        if ( argv[argc-1][strlen(argv[argc-1]) - 1] == 'h') {
+    if ( argv[argc-1][strlen(argv[argc-1]) - 1] == 'h') {
+        while (read_next_byte()) {
             if ( get_byte(0) == '\n') {
                 if ( needs_closing_imp) {
                     fprintf(out, (".h\""));
                     needs_closing_imp = (0);
                 }
+                if ( ! is_preprocessor_line && needs_semi) {
+                    fprintf(out, (";"));
+                    needs_semi = (0);
+                }
                 line_pos = -1;
                 indent_level = (0);
+                is_preprocessor_line = (0);
             }
 
             if ( get_byte(0) == ' ' && line_pos == 0) {
@@ -176,25 +179,35 @@ int main (int argc, char **argv) {
             else {
                 line_pos += 1;
             }
+
+            if ( (get_byte(0) == '#' && in_regular_code())) {
+                is_preprocessor_line = (1);
+            }
             
             if ( ! indent_level) {
                 if ( do_replacements()) {
-                    
+                    needs_semi = (1);
                 }
-                else if ( replace_keyword((":"), (";"))) {
-                    
+                else if ( replace_keyword((":"), (""))) {
+                    needs_semi = (1);
                 }
                 else if ( replace_keyword(("import"), ("#include"))) {
                     fprintf(out, (" \""));
                     read_next_byte();
                     needs_closing_imp = (1);
+                    is_preprocessor_line = (1);
                 }
                 else {
                     fprintf(out, ("%c"), get_byte(0));
                 }
             }
         }
-        else {
+    }
+    else {
+        char * header_name = argv[argc-1];
+        header_name[strlen(header_name) - 1] = 'h';
+        fprintf(out, ("#include \"%s\"\n"), header_name);
+        while (read_next_byte()) {
             automatic_semicolon();
 
             if ( get_byte(0) == ':' && get_byte(1) == '\n') {
@@ -215,11 +228,10 @@ int main (int argc, char **argv) {
             else if ( replace_keyword(("if"), ("if ("))) {
                 needs_closing_paren = (1);
             }
-            else if ( replace_keyword(("import"), ("#include"))) {
-                fprintf(out, (" \""));
-                read_next_byte();
-                needs_closing_imp = (1);
-                is_preprocessor_line = (1);
+            else if ( buf_starts_with(("import")) && in_regular_code()) {
+                while(get_byte(0) != '\n') {
+                    read_next_byte();
+                }
             }
             else if ( get_byte(0) == '"' && in_regular_code()) {
                 fprintf(out, ("(\""));

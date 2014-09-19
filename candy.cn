@@ -6,15 +6,15 @@ import fcntl
 import io
 #endif
 
-byte buf[256]
-byte buf_start = 255
-byte buf_len = 0
-byte is_preprocessor_line = false
-byte is_single_quoted = false
-byte is_double_quoted = false
-byte literal = false
-FILE* in
-FILE* out
+    byte buf[256]
+    byte buf_start = 255
+    byte buf_len = 0
+    byte is_preprocessor_line = false
+    byte is_single_quoted = false
+    byte is_double_quoted = false
+    byte literal = false
+    FILE* in
+    FILE* out
 
 int in_regular_code():
     return not is_double_quoted and 
@@ -130,37 +130,50 @@ int main (int argc, char **argv):
     byte indent_level = false
     byte needs_closing_paren = false
     byte needs_closing_imp = false
+    byte needs_semi = false
     in = fopen(argv[argc-2], "r")
     out = fopen(argv[argc-1], "wb")
 
     fill_buffer()
 
-    while (read_next_byte()):
-        if argv[argc-1][strlen(argv[argc-1]) - 1] == 'h':
+    if argv[argc-1][strlen(argv[argc-1]) - 1] == 'h':
+        while (read_next_byte()):
             if get_byte(0) == '\n':
                 if needs_closing_imp:
                     fprintf(out, ".h\"")
                     needs_closing_imp = false
+                if not is_preprocessor_line and needs_semi:
+                    fprintf(out, ";")
+                    needs_semi = false
                 line_pos = -1
                 indent_level = false
+                is_preprocessor_line = false
 
             if get_byte(0) == ' ' and line_pos == 0:
                 indent_level = true
             else:
                 line_pos += 1
+
+            if (get_byte(0) == '#' and in_regular_code()):
+                is_preprocessor_line = true
             
             if not indent_level:
                 if do_replacements():
-                    pass
-                else if replace_keyword(":", ";"):
-                    pass
+                    needs_semi = true
+                else if replace_keyword(":", ""):
+                    needs_semi = true
                 else if replace_keyword("import", "#include"):
                     fprintf(out, " \"")
                     read_next_byte()
                     needs_closing_imp = true
+                    is_preprocessor_line = true
                 else:
                     fprintf(out, "%c", get_byte(0))
-        else:
+    else:
+        char * header_name = argv[argc-1]
+        header_name[strlen(header_name) - 1] = 'h'
+        fprintf(out, "#include \"%s\"\n", header_name)
+        while (read_next_byte()):
             automatic_semicolon()
 
             if get_byte(0) == ':' and get_byte(1) == '\n':
@@ -176,11 +189,9 @@ int main (int argc, char **argv):
                 fprintf(out, "\n")
             else if replace_keyword("if", "if ("):
                 needs_closing_paren = true
-            else if replace_keyword("import", "#include"):
-                fprintf(out, " \"")
-                read_next_byte()
-                needs_closing_imp = true
-                is_preprocessor_line = true
+            else if buf_starts_with("import") and in_regular_code():
+                while(get_byte(0) != '\n'):
+                    read_next_byte()
             else if get_byte(0) == '"' and in_regular_code():
                 fprintf(out, "(\"")
             else if do_replacements():

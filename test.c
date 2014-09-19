@@ -1,5 +1,4 @@
-#include "stdlib.h"
-#include "stdio.h"
+#include "test_out.h"
 
 void main() {
     printf ("Hello, world!");
