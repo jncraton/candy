@@ -25,10 +25,8 @@ looks a little more like Python.
 Usage
 -----
 
-The translator is so simple that it doesn't require reading and
-writing to files. It reads a program from stdio and writes C to
-stdout. The following will translate a program from candy to C:
+The following will translate a program from candy to C:
 
-`candy < in.cn > out.c`
+`candy in.cn out.c`
 
 There are currently no option to pass to the translator.

@@ -13,6 +13,8 @@ unsigned char is_preprocessor_line = (0);
 unsigned char is_single_quoted = (0);
 unsigned char is_double_quoted = (0);
 unsigned char literal = (0);
+FILE* in;
+FILE* out;
 
 int in_regular_code() {
     return ! is_double_quoted && 
@@ -21,7 +23,7 @@ int in_regular_code() {
     }
 
 void fill_buffer() {
-    buf_len = fread(buf, 1, 254, stdin);
+    buf_len = fread(buf, 1, 254, in);
 }
 
 unsigned char get_byte(unsigned char i) {
@@ -41,7 +43,7 @@ unsigned char read_next_byte() {
     
     buf_len--;
     
-    if ( fread(tmp, 1, 1, stdin)) {
+    if ( fread(tmp, 1, 1, in)) {
         set_byte(-1, tmp[0]);
         buf_len++;
     }
@@ -116,7 +118,7 @@ int replace_keyword(char* keyword, char* replacement) {
         return (0);
         
     }
-    printf(replacement);
+    fprintf(out, replacement);
     
     for (int i = 0; i < strlen(keyword) - 1; i++) {
         read_next_byte();
@@ -131,7 +133,7 @@ void automatic_semicolon() {
     if ( (get_byte(0) == '\n' && 
         ! is_preprocessor_line &&
         ! is_separator(get_byte(-1)))) {
-        printf((";"));
+        fprintf(out, (";"));
     }
 }
 
@@ -152,50 +154,47 @@ int main (int argc, char **argv) {
     unsigned char indent_level = (0);
     unsigned char needs_closing_paren = (0);
     unsigned char needs_closing_imp = (0);
+    
+    in = fopen(argv[argc-2], ("r"));
+    out = fopen(argv[argc-1], ("wb"));
 
     fill_buffer();
-
-    #ifdef _WIN32
-    // Work around newline replacement on Windows;
-    extern int fileno(FILE*);
-    setmode(fileno(stdout), O_BINARY);
-    #endif
 
     while (read_next_byte()) {
         automatic_semicolon();
 
         if ( get_byte(0) == ':' && get_byte(1) == '\n') {
             if ( needs_closing_paren) {
-                printf((")"));
+                fprintf(out, (")"));
                 needs_closing_paren = (0);
             }
-            printf((" {"));
+            fprintf(out, (" {"));
             open_braces++;
         }
         else if ( get_byte(0) == '\n') {
             if ( needs_closing_imp) {
-                printf((".h\""));
+                fprintf(out, (".h\""));
                 needs_closing_imp = (0);
             }
-            printf(("\n"));
+            fprintf(out, ("\n"));
         }
         else if ( replace_keyword(("if"), ("if ("))) {
             needs_closing_paren = (1);
         }
         else if ( replace_keyword(("import"), ("#include"))) {
-            printf((" \""));
+            fprintf(out, (" \""));
             read_next_byte();
             needs_closing_imp = (1);
             is_preprocessor_line = (1);
         }
         else if ( get_byte(0) == '"' && in_regular_code()) {
-            printf(("(\""));
+            fprintf(out, ("(\""));
         }
         else if ( do_replacements()) {
             
         }
         else {
-            printf(("%c"), get_byte(0));
+            fprintf(out, ("%c"), get_byte(0));
         }
         
         if ( ! is_preprocessor_line) {
@@ -203,10 +202,10 @@ int main (int argc, char **argv) {
             if ( get_byte(0) == '\n') {
                 while (open_braces && indent_level > next_indent()) {
                     for (unsigned char i = 4; i < indent_level << 2; i++) {
-                        printf((" "));
+                        fprintf(out, (" "));
                     }
 
-                    printf(("}\n"));
+                    fprintf(out, ("}\n"));
                     indent_level--;
                     open_braces--;
                 }
@@ -216,7 +215,7 @@ int main (int argc, char **argv) {
 
             if ( get_byte(0) == '"' && ! (literal || is_single_quoted)) {
                 if ( is_double_quoted) {
-                    printf((")"));
+                    fprintf(out, (")"));
                 }
             }
             
@@ -246,6 +245,9 @@ int main (int argc, char **argv) {
         
         line_pos +=1;
     }
-
+    
+    fclose(in);
+    fclose(out);
+    
     return (0);
 }
