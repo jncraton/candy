@@ -154,96 +154,131 @@ int main (int argc, char **argv) {
     unsigned char indent_level = (0);
     unsigned char needs_closing_paren = (0);
     unsigned char needs_closing_imp = (0);
-    
     in = fopen(argv[argc-2], ("r"));
     out = fopen(argv[argc-1], ("wb"));
 
     fill_buffer();
 
     while (read_next_byte()) {
-        automatic_semicolon();
+        if ( argv[argc-1][strlen(argv[argc-1]) - 1] == 'h') {
+            if ( get_byte(0) == '\n') {
+                if ( needs_closing_imp) {
+                    fprintf(out, (".h\""));
+                    needs_closing_imp = (0);
+                }
+                line_pos = -1;
+                indent_level = (0);
+            }
 
-        if ( get_byte(0) == ':' && get_byte(1) == '\n') {
-            if ( needs_closing_paren) {
-                fprintf(out, (")"));
-                needs_closing_paren = (0);
+            if ( get_byte(0) == ' ' && line_pos == 0) {
+                indent_level = (1);
             }
-            fprintf(out, (" {"));
-            open_braces++;
-        }
-        else if ( get_byte(0) == '\n') {
-            if ( needs_closing_imp) {
-                fprintf(out, (".h\""));
-                needs_closing_imp = (0);
+            else {
+                line_pos += 1;
             }
-            fprintf(out, ("\n"));
-        }
-        else if ( replace_keyword(("if"), ("if ("))) {
-            needs_closing_paren = (1);
-        }
-        else if ( replace_keyword(("import"), ("#include"))) {
-            fprintf(out, (" \""));
-            read_next_byte();
-            needs_closing_imp = (1);
-            is_preprocessor_line = (1);
-        }
-        else if ( get_byte(0) == '"' && in_regular_code()) {
-            fprintf(out, ("(\""));
-        }
-        else if ( do_replacements()) {
             
+            if ( ! indent_level) {
+                if ( do_replacements()) {
+                    
+                }
+                else if ( replace_keyword((":"), (";"))) {
+                    
+                }
+                else if ( replace_keyword(("import"), ("#include"))) {
+                    fprintf(out, (" \""));
+                    read_next_byte();
+                    needs_closing_imp = (1);
+                }
+                else {
+                    fprintf(out, ("%c"), get_byte(0));
+                }
+            }
         }
         else {
-            fprintf(out, ("%c"), get_byte(0));
-        }
-        
-        if ( ! is_preprocessor_line) {
-            // Handle closing brace insertion;
-            if ( get_byte(0) == '\n') {
-                while (open_braces && indent_level > next_indent()) {
-                    for (unsigned char i = 4; i < indent_level << 2; i++) {
-                        fprintf(out, (" "));
+            automatic_semicolon();
+
+            if ( get_byte(0) == ':' && get_byte(1) == '\n') {
+                if ( needs_closing_paren) {
+                    fprintf(out, (")"));
+                    needs_closing_paren = (0);
+                }
+                fprintf(out, (" {"));
+                open_braces++;
+            }
+            else if ( get_byte(0) == '\n') {
+                if ( needs_closing_imp) {
+                    fprintf(out, (".h\""));
+                    needs_closing_imp = (0);
+                }
+                fprintf(out, ("\n"));
+            }
+            else if ( replace_keyword(("if"), ("if ("))) {
+                needs_closing_paren = (1);
+            }
+            else if ( replace_keyword(("import"), ("#include"))) {
+                fprintf(out, (" \""));
+                read_next_byte();
+                needs_closing_imp = (1);
+                is_preprocessor_line = (1);
+            }
+            else if ( get_byte(0) == '"' && in_regular_code()) {
+                fprintf(out, ("(\""));
+            }
+            else if ( do_replacements()) {
+                
+            }
+            else {
+                fprintf(out, ("%c"), get_byte(0));
+            }
+            
+            if ( ! is_preprocessor_line) {
+                // Handle closing brace insertion;
+                if ( get_byte(0) == '\n') {
+                    while (open_braces && indent_level > next_indent()) {
+                        for (unsigned char i = 4; i < indent_level << 2; i++) {
+                            fprintf(out, (" "));
+                        }
+
+                        fprintf(out, ("}\n"));
+                        indent_level--;
+                        open_braces--;
                     }
 
-                    fprintf(out, ("}\n"));
-                    indent_level--;
-                    open_braces--;
+                    indent_level = next_indent();
                 }
 
-                indent_level = next_indent();
+                if ( get_byte(0) == '"' && ! (literal || is_single_quoted)) {
+                    if ( is_double_quoted) {
+                        fprintf(out, (")"));
+                    }
+                }
+                
+            }
+            if ( get_byte(0) == '\n') {
+                is_preprocessor_line = (0);
+            }
+
+            if ( get_byte(0) == '#' && in_regular_code()) {
+                is_preprocessor_line = (1);
+            }
+
+            if ( get_byte(0) == '\'' && ! (literal || is_double_quoted)) {
+                is_single_quoted = ! is_single_quoted;
             }
 
             if ( get_byte(0) == '"' && ! (literal || is_single_quoted)) {
-                if ( is_double_quoted) {
-                    fprintf(out, (")"));
-                }
+                is_double_quoted = ! is_double_quoted;
             }
             
+            if ( get_byte(0) == '\\' && ! literal) {
+                literal = (1);
+            }
+            else {
+                literal = (0);
+            }
+            
+            line_pos +=1;
         }
-        if ( get_byte(0) == '\n') {
-            is_preprocessor_line = (0);
-        }
-
-        if ( get_byte(0) == '#' && in_regular_code()) {
-            is_preprocessor_line = (1);
-        }
-
-        if ( get_byte(0) == '\'' && ! (literal || is_double_quoted)) {
-            is_single_quoted = ! is_single_quoted;
-        }
-
-        if ( get_byte(0) == '"' && ! (literal || is_single_quoted)) {
-            is_double_quoted = ! is_double_quoted;
-        }
-        
-        if ( get_byte(0) == '\\' && ! literal) {
-            literal = (1);
-        }
-        else {
-            literal = (0);
-        }
-        
-        line_pos +=1;
     }
     
     fclose(in);

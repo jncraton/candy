@@ -12,4 +12,5 @@ clean:
 test: candy.exe
 	@echo Testing...
 	@candy.exe test.cn test_out.c
+	@candy.exe test.cn test_out.h
 	@cmp test_out.c test.c
