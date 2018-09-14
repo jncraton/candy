@@ -115,7 +115,7 @@ int replace_keyword(char* keyword, char* replacement) {
         return (0);
         
     }
-    fprintf(out, replacement);
+    fprintf(out, ("%s"), replacement);
     
     for (int i = 0; i < strlen(keyword) - 1; i++) {
         read_next_byte();
