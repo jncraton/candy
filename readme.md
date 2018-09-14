@@ -1,6 +1,8 @@
 Candy
 =====
 
+[![Build Status](https://travis-ci.org/jncraton/candy.svg?branch=master)](https://travis-ci.org/jncraton/candy)
+
 Candy is a simple programming language that adds some syntactic sugar
 to the C language. Programs written in candy are translated to C and 
 then can be compiled using a traditional C compiler such as GCC. The
