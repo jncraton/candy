@@ -1,0 +1,134 @@
+import stdlib
+import stdio
+import stdint
+
+import libpng12/png
+
+static int width = 400
+static int height = 300
+
+png_bytep * row_pointers
+
+uint32_t trans = 0x00000000
+uint32_t white = 0xffffffff
+uint32_t black = 0xff000000
+uint32_t red = 0xff0000ff
+uint32_t green = 0xff00ff00
+uint32_t blue = 0xffff0000
+
+def pixel_each(void (*cb)(int, int)):
+    for (int x = 0; x < width; x++):
+        for (int y = 0; y < height; y++):
+            (*cb)(x, y)
+
+def set_pixel(int x, int y, uint32_t value):
+    if x >= 0 and x < width and
+        y > 0 and y <= height:
+        *(uint32_t*)(&row_pointers[height - y][x*4]) = value
+
+def plot_point(int x, int y, uint32_t value):
+    set_pixel(x, y, value)
+    set_pixel(x + 1, y, value)
+    set_pixel(x, y + 1, value)
+    set_pixel(x - 1, y, value)
+    set_pixel(x, y - 1, value)
+
+def init():
+    row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * height);
+    for (int y = 0; y < height; y++):
+        row_pointers[y] = (png_byte*) malloc(sizeof(png_bytep) * width);
+        for (int x = 0; x < width; x++):
+            *(uint32_t*)(&row_pointers[y][x*4]) = white
+
+def draw_border(int x, int y):
+    const int border_width = 5;
+
+    if x < border_width or x > width - border_width or
+        y < border_width or y > height - border_width:
+        set_pixel(x, y, black)
+
+def write_png_file(char* file_name):
+    /* create file */
+    FILE *fp = fopen(file_name, "wb")
+
+    png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL)
+    if not png_ptr:
+        exit(1)
+
+    png_infop info_ptr = png_create_info_struct(png_ptr)
+    if not info_ptr:
+        exit(1)
+
+    if setjmp(png_jmpbuf(png_ptr)):
+        exit(1)
+
+    png_init_io(png_ptr, fp)
+
+    /* write header */
+    if setjmp(png_jmpbuf(png_ptr)):
+        exit(1)
+
+    png_set_IHDR(png_ptr, info_ptr, width, height,
+    8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
+    PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE)
+
+    png_write_info(png_ptr, info_ptr)
+
+    /* write bytes */
+    if setjmp(png_jmpbuf(png_ptr)):
+        exit(1)
+
+    png_write_image(png_ptr, row_pointers)
+
+    /* end write */
+    if setjmp(png_jmpbuf(png_ptr)):
+        exit(1)
+
+    png_write_end(png_ptr, NULL)
+
+    /* cleanup heap allocation */
+    for (int y = 0; y < height; y++):
+        free(row_pointers[y])
+    
+    free(row_pointers)
+
+    fclose(fp)
+
+def plot_data(char* filename):
+    FILE * fp = fopen(filename, "r")
+    
+    float x, y;
+    float x_min = 100000, x_max = -100000, y_min = 100000, y_max = -100000;
+    float x_scale, y_scale;
+    
+    while (fscanf(fp, "%f,%f", &x, &y) == 2):
+        if x > x_max:
+            x_max = x
+        if y > y_max:
+            y_max = y
+        if x < x_min:
+            x_min = x
+        if y < y_min:
+            y_min = y
+    
+    x_scale = width / (x_max - x_min)
+    y_scale = width / (y_max - y_min)
+    
+    rewind(fp)
+    
+    while (fscanf(fp, "%f,%f", &x, &y) == 2):
+        plot_point(x * x_scale, y * y_scale, red)
+    
+    fclose(fp)
+    
+int main(int argc, char **argv):
+    if argc != 2:
+        exit(1)
+
+    init()
+    pixel_each(draw_border)
+    plot_data("data.csv")
+    write_png_file(argv[1])
+
+    return 0
+
