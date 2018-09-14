@@ -2,8 +2,8 @@ candy: candy.c
 	gcc -std=c99 -s -Os -Wall -o candy candy.c
 	
 candy.c: candy.cn
-	candy_stable candy.cn candy.c
-	candy_stable candy.cn candy.h
+	./candy candy.cn candy.c
+	./candy candy.cn candy.h
 	
 clean:
 	rm candy
